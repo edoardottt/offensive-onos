@@ -4,8 +4,8 @@
 
     <parent>
         <groupId>org.onosproject</groupId>
-        <artifactId>onos-2.5.9</artifactId>
-        <version>2.5.9</version>
+        <artifactId>onos-base</artifactId>
+        <version>2</version>
     </parent>
 
     <groupId>org.onosproject</groupId>
@@ -14,6 +14,12 @@
     <packaging>pom</packaging>
 
     <description>edoardottt's experiments in weaponizing ONOS applications</description>
+
+    <developers>
+        <developer>
+            <url>http://www.edoardoottavianelli.it</url>
+        </developer>
+    </developers>
 
     <modules>
         <module>mal-host-tracking</module>
