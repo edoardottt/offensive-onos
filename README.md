@@ -20,6 +20,26 @@ Compile each app into an .oar (ONOS app archive) file which can be installed int
 mvn install
 ```
 
+Search for .oar files
+```console
+make oar
+```
+
+Start ONOS locally
+```console
+bazel run onos-local
+```
+
+SSH into ONOS
+```console
+ssh -p 8101 onos@172.17.0.1
+```
+
+Install the application(s)
+```console
+./tools/package/runtime/bin/onos-app localhost install! ~/github/offensive-onos-apps/mal-host-tracking/target/onos-app-malhosttracking-0.0.1.oar
+```
+
 In order to install and activate apps into ONOS [follow this guide](https://wiki.onosproject.org/display/ONOS/Managing+ONOS+applications).
 
 Changelog

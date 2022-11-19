@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.onosproject</groupId>
         <artifactId>onos-dependencies</artifactId>
-        <version>2.55.0</version>
+        <version>2.5.5</version>
         <relativePath/><!-- parent is remote -->
     </parent>
 
@@ -18,7 +18,7 @@
     <description>Sample application that modifies the Host Data Store (Host-Switch association) just for fun</description>
 
     <properties>
-        <onos.version>2.55.0</onos.version>
+        <onos.version>2.5.5</onos.version>
         <onos.app.name>org.onosproject.malhosttracking</onos.app.name>
         <onos.app.title>Malicious Host Tracking App</onos.app.title>
         <onos.app.category>Monitoring</onos.app.category>

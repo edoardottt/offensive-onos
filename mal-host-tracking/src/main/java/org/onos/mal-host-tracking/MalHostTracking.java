@@ -1,7 +1,6 @@
-/*
- * https://github.com/edoardottt/offensive-onos-apps
- */
-
+/**
+* https://github.com/edoardottt/offensive-onos-apps.
+*/
 package org.onos.malhosttracking;
 
 
@@ -13,17 +12,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Sample application that modifies the Host Data Store 
+ * Sample application that modifies the Host Data Store
  * (Host-Switch association) just for fun.
  */
 @Component(immediate = true)
 public class MalHostTracking {
-    
+
     private static Logger log = LoggerFactory.getLogger(MalHostTracking.class);
 
     private static final String STORE_ADD = "[ > ] Host Data Store Poisoned. Added pair {} - {}";
     private static final String STORE_REMOVED = "[ > ] Host Data Store Poisoned. Removed pair {} - {}";
-    
+
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     protected CoreService coreService;
 
