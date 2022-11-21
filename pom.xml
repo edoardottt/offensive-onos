@@ -1,28 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <parent>
-        <groupId>org.onosproject</groupId>
-        <artifactId>onos-base</artifactId>
-        <version>2</version>
-    </parent>
-
+      
+  <modelVersion>4.0.0</modelVersion>
+      
+  <parent>
+            
     <groupId>org.onosproject</groupId>
-    <artifactId>offensive-onos-apps</artifactId>
-    <version>0.0.1</version>
-    <packaging>pom</packaging>
-
-    <description>edoardottt's experiments in weaponizing ONOS applications</description>
-
-    <developers>
-        <developer>
-            <url>http://www.edoardoottavianelli.it</url>
-        </developer>
-    </developers>
-
-    <modules>
-        <module>mal-host-tracking</module>
-    </modules>
-
+            
+    <artifactId>onos-base</artifactId>
+            
+    <version>2</version>
+        
+  </parent>
+      
+  <groupId>org.onosproject</groupId>
+      
+  <artifactId>offensive-onos-apps</artifactId>
+      
+  <version>0.0.1</version>
+      
+  <packaging>pom</packaging>
+      
+  <description>edoardottt's experiments in weaponizing ONOS applications</description>
+      
+  <developers>
+            
+    <developer>
+                  
+      <url>http://www.edoardoottavianelli.it</url>
+              
+    </developer>
+        
+  </developers>
+  
+  <modules>
+      
+    <module>mal-host-tracking-app</module>
+      
+  </modules>
 </project>
