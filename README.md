@@ -37,7 +37,7 @@ ssh -p 8101 onos@172.17.0.1
 
 Install the application(s)
 ```console
-./tools/package/runtime/bin/onos-app localhost install! ~/github/offensive-onos-apps/mal-host-tracking/target/onos-app-malhosttracking-0.0.1.oar
+github/onos$> ./tools/package/runtime/bin/onos-app localhost install! ~/github/offensive-onos-apps/APPNAME/target/APPNAME-*.oar
 ```
 
 Changelog

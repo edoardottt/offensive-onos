@@ -3,7 +3,7 @@ compile:
 	@echo "Done."
 
 install:
-	@mvn install
+	@mvn clean install
 	@echo "Done."
 
 oar:
