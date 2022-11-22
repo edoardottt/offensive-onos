@@ -15,11 +15,6 @@
   ~ limitations under the License.
   --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-    <artifactId>offensive-onos-apps</artifactId>
-    <groupId>org.onosproject</groupId>
-    <version>0.0.1</version>
-  </parent>
 
     <groupId>org.edoardottt.malhosttracking</groupId>
     <artifactId>mal-host-tracking-app</artifactId>
@@ -32,7 +27,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <onos.version>2.0.0</onos.version>
-        <onos.app.name>org.edoardottt.mal-host-tracking-app</onos.app.name>
+        <onos.app.name>org.edoardottt.malhosttracking</onos.app.name>
         <onos.app.title>Malicious Host Tracking App</onos.app.title>
         <onos.app.origin>edoardottt</onos.app.origin>
         <onos.app.category>default</onos.app.category>
@@ -102,17 +97,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-api</artifactId>
-    <version>1.6.1</version>
-</dependency>
-<dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-simple</artifactId>
-    <version>1.6.1</version>
-</dependency>
-
     </dependencies>
 
     <build>
@@ -149,6 +133,7 @@
                 <version>2.0</version>
                 <executions>
                     <execution>
+                        <?m2e execute onConfiguration?>
                         <id>cfg</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -156,6 +141,7 @@
                         </goals>
                     </execution>
                     <execution>
+                        <?m2e execute onConfiguration?>
                         <id>swagger</id>
                         <phase>generate-sources</phase>
                         <goals>
