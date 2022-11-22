@@ -24,13 +24,12 @@ import org.junit.Test;
  */
 public class AppComponentTest {
 
-    private AppComponent component;
+    private MalHostTracking component;
 
     @Before
     public void setUp() {
-        component = new AppComponent();
+        component = new MalHostTracking();
         component.activate();
-
     }
 
     @After

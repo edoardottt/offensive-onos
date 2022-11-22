@@ -3,7 +3,7 @@ compile:
 	@echo "Done."
 
 install:
-	@mvn clean install
+	@mvn clean install -DskipTests
 	@echo "Done."
 
 oar:
