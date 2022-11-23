@@ -22,7 +22,7 @@ import org.junit.Test;
 /**
  * Set of tests of the ONOS application component.
  */
-public class AppComponentTest {
+public class MalHostTrackingTest {
 
     private MalHostTracking component;
 
@@ -39,7 +39,7 @@ public class AppComponentTest {
 
     @Test
     public void basics() {
-
+        System.out.println("ciao");
     }
 
 }

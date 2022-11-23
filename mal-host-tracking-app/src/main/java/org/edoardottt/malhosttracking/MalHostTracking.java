@@ -10,6 +10,10 @@ package org.edoardottt.malhosttracking;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.onosproject.core.CoreService;
 import org.onosproject.net.host.HostService;
 import org.onosproject.net.host.HostStore;
@@ -23,8 +27,6 @@ import org.onosproject.net.DeviceId;
 import org.onosproject.net.Port;
 import org.onosproject.net.PortNumber;
 import org.onosproject.core.ApplicationId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.Timer;
 import java.util.Random;
 import java.util.ArrayList;
@@ -39,11 +41,21 @@ public class MalHostTracking {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected CoreService coreService;
+
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected HostService hostService;
+
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected HostStore hostStore;
+
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected DeviceService deviceService;
+
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected DeviceStore deviceStore;
+
     private ApplicationId appId;
 
     // --------------------------------------------------------
@@ -55,7 +67,7 @@ public class MalHostTracking {
     protected void activate() {
         appId = coreService.registerApplication("org.edoardottt.malhosttracking");
         startTimer(TIMEOUT);
-        log.info("Malicious Host Tracking App Started! " + "App ID: " + appId.toString());
+        log.info("Malicious Host Tracking App Started! App ID: {}", appId.toString());
     }
 
     @Deactivate
@@ -73,8 +85,8 @@ public class MalHostTracking {
         List<Port> ports = deviceStore.getPorts(dId);
         PortNumber pNumber = pickRandomPort(ports).number();
         HostLocation hl = new HostLocation(dId, pNumber, 0);
-
         hostStore.appendLocation(hId, hl);
+        log.info("Malicious Host Tracking App: Host {} connected to device {}", hId.toString(), dId.toString());
     }
 
     // startTimer starts a timer that timeouts every X seconds.
@@ -83,7 +95,7 @@ public class MalHostTracking {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Time up, running Task!");
+                log.info("Time up, running Task!");
                 editHostStore();
             }
         };
