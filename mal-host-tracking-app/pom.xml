@@ -91,18 +91,23 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Import-Package>
-                            *;resolution:=optional
-                        </Import-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
+        <plugin>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>maven-bundle-plugin</artifactId>
+            <extensions>true</extensions>
+            <version>5.1.1</version>
+            <configuration>
+                    <supportedProjectTypes>
+                        <supportedProjectType>bundle</supportedProjectType>
+                    </supportedProjectTypes>
+                <instructions>
+                    <Export-Package>
+                        org.onosproject.*;
+                        org.onlab.*;
+                    </Export-Package>
+                </instructions>
+            </configuration>
+        </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -129,7 +134,7 @@
                 <version>2.0</version>
                 <executions>
                     <execution>
-                        <?m2e execute onConfiguration?>
+                        <?m2e execute onConfiguration,onIncremental?>
                         <id>cfg</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -137,7 +142,7 @@
                         </goals>
                     </execution>
                     <execution>
-                        <?m2e execute onConfiguration?>
+                        <?m2e execute onConfiguration,onIncremental?>
                         <id>swagger</id>
                         <phase>generate-sources</phase>
                         <goals>
