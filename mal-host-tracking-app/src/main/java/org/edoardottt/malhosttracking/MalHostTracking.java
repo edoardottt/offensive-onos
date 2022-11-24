@@ -59,6 +59,13 @@ public class MalHostTracking {
     private ApplicationId appId;
 
     Timer timer = new Timer();
+    TimerTask timerTask = new TimerTask() {
+        @Override
+        public void run() {
+            log.info("Time up, running Task!");
+            editHostStore();
+        }
+    };
 
     // --------------------------------------------------------
     // CHANGE THIS PARAMETER TO TRIGGER THE APP EVERY X SECONDS.
@@ -93,13 +100,6 @@ public class MalHostTracking {
 
     // startTimer starts a timer that timeouts every X seconds.
     private void startTimer(long timeout) {
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                log.info("Time up, running Task!");
-                editHostStore();
-            }
-        };
         timer.schedule(timerTask, 0, timeout);
     }
 
