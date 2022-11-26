@@ -18,6 +18,9 @@ package org.edoardottt.test;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.onosproject.core.CoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,10 +30,14 @@ import org.slf4j.LoggerFactory;
 @Component(immediate = true)
 public class AppComponent {
 
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected CoreService coreService;
+
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Activate
     protected void activate() {
+        coreService.registerApplication("org.edoardottt.test.app", () -> log.info("Periscope down."));
         log.info("Started Test App!");
     }
 

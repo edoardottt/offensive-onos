@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.edoardottt.malhosttracking</groupId>
+    <groupId>org.edoardottt</groupId>
     <artifactId>mal-host-tracking-app</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
@@ -12,7 +12,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <onos.version>2.0.0</onos.version>
+        <onos.version>2.7.0</onos.version>
         <onos.app.name>org.edoardottt.malhosttracking</onos.app.name>
         <onos.app.title>Malicious Host Tracking App</onos.app.title>
         <onos.app.origin>edoardottt</onos.app.origin>
@@ -89,25 +89,14 @@
         </dependency>
     </dependencies>
 
-    <build>
+   <build>
         <plugins>
-        <plugin>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>maven-bundle-plugin</artifactId>
-            <extensions>true</extensions>
-            <version>5.1.1</version>
-            <configuration>
-                    <supportedProjectTypes>
-                        <supportedProjectType>bundle</supportedProjectType>
-                    </supportedProjectTypes>
-                <instructions>
-                    <Export-Package>
-                        org.onosproject.*;
-                        org.onlab.*;
-                    </Export-Package>
-                </instructions>
-            </configuration>
-        </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>3.5.0</version>
+                <extensions>true</extensions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -134,7 +123,6 @@
                 <version>2.0</version>
                 <executions>
                     <execution>
-                        <?m2e execute onConfiguration,onIncremental?>
                         <id>cfg</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -142,7 +130,6 @@
                         </goals>
                     </execution>
                     <execution>
-                        <?m2e execute onConfiguration,onIncremental?>
                         <id>swagger</id>
                         <phase>generate-sources</phase>
                         <goals>

@@ -30,7 +30,6 @@ public class AppComponentTest {
     public void setUp() {
         component = new AppComponent();
         component.activate();
-
     }
 
     @After
