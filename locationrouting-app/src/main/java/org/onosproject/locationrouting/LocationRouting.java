@@ -93,20 +93,8 @@ public class LocationRouting {
         @Override
         public void event(HostEvent event) {
             eventExecutor.execute(() -> {
-                switch (event.type()) {
-                    case HOST_ADDED:
-                    case HOST_REMOVED:
-                    case HOST_UPDATED:
-                        // don't care if a host has been added, removed.
-                        break;
-                    case HOST_MOVED:
-                        log.info("Host {} has moved; cleaning up.", event.subject());
-                        cleanup(event.subject());
-                        break;
-    
-                    default:
-                        break;
-                }
+                log.info("Host {} has moved; cleaning up.", event.subject());
+                cleanup(event.subject());
             });
         }
     }
