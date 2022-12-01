@@ -22,10 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Skeletal ONOS application component.
+ * Location Routing.
  */
 @Component(immediate = true)
-public class AppComponent {
+public class LocationRouting {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
