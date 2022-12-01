@@ -40,6 +40,7 @@ import java.util.Timer;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.TimerTask;
 
 /**
@@ -88,12 +89,15 @@ public class MalHostTracking {
 
     @Deactivate
     protected void deactivate() {
+        timer.cancel();
+        timer.purge();
         log.info("Stopped malhosttracking App!");
     }
 
     // editHostStore mess up with the Host Data Store.
     private void editHostStore() {
         HostId hId = pickRandomHost().id();
+        emptyLocation(hId);
         DeviceId dId = pickRandomDevice().id();
         List<Port> ports = deviceStore.getPorts(dId);
         PortNumber pNumber = pickRandomPort(ports).number();
@@ -105,6 +109,14 @@ public class MalHostTracking {
     // startTimer starts a timer that timeouts every X seconds.
     private void startTimer(long timeout) {
         timer.scheduleAtFixedRate(timerTask, 0, timeout);
+    }
+
+    private void emptyLocation(HostId hID) {
+        Host h = hostService.getHost(hID);
+        Set<HostLocation> locations = h.locations();
+        for (HostLocation location : locations) {
+            hostStore.removeLocation(hID, location);
+        }
     }
 
     // pickRandomHost picks a random host
