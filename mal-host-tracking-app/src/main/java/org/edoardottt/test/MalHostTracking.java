@@ -1,9 +1,17 @@
 /*
- * Malicious Host Tracking Application
- * 
- * https://github.com/edoardottt/offensive-onos-apps/
- * 
- * edoardottt, https://www.edoardoottavianelli.it/
+ * Copyright 2022-present Open Networking Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.edoardottt.malhosttracking;
 
@@ -15,6 +23,7 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.onosproject.core.CoreService;
+import org.onosproject.net.host.HostService;
 import org.onosproject.net.host.HostService;
 import org.onosproject.net.host.HostStore;
 import org.onosproject.net.Host;
@@ -34,7 +43,7 @@ import java.util.List;
 import java.util.TimerTask;
 
 /**
- * Malicious Host Tracking
+ * Malicious Host Tracking Application.
  */
 @Component(immediate = true)
 public class MalHostTracking {
@@ -56,8 +65,6 @@ public class MalHostTracking {
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected DeviceStore deviceStore;
 
-    private ApplicationId appId;
-
     Timer timer = new Timer();
     TimerTask timerTask = new TimerTask() {
         @Override
@@ -68,29 +75,26 @@ public class MalHostTracking {
     };
 
     // --------------------------------------------------------
-    // CHANGE THIS PARAMETER TO TRIGGER THE APP EVERY X SECONDS.
+    // CHANGE THIS PARAMETER TO TRIGGER THE APP EVERY X MILLISECONDS.
     // --------------------------------------------------------
-    private static final long TIMEOUT = 10;
+    private static final long TIMEOUT = 10000;
 
     @Activate
     protected void activate() {
-        appId = coreService.registerApplication("org.edoardottt.malhosttracking");
+        coreService.registerApplication("org.edoardottt.malhosttracking.app", () -> log.info("Periscope down."));
         startTimer(TIMEOUT);
-        log.info("Malicious Host Tracking App Started! App ID: {}", appId.toString());
+        log.info("Started malhosttracking App!");
     }
 
     @Deactivate
     protected void deactivate() {
-        log.info("Malicious Host Tracking App Stopped!");
+        log.info("Stopped malhosttracking App!");
     }
 
     // editHostStore mess up with the Host Data Store.
     private void editHostStore() {
-        Host h = pickRandomHost();
-        Device d = pickRandomDevice();
-
-        HostId hId = h.id();
-        DeviceId dId = d.id();
+        HostId hId = pickRandomHost().id();
+        DeviceId dId = pickRandomDevice().id();
         List<Port> ports = deviceStore.getPorts(dId);
         PortNumber pNumber = pickRandomPort(ports).number();
         HostLocation hl = new HostLocation(dId, pNumber, 0);
@@ -100,7 +104,7 @@ public class MalHostTracking {
 
     // startTimer starts a timer that timeouts every X seconds.
     private void startTimer(long timeout) {
-        timer.schedule(timerTask, 0, timeout);
+        timer.scheduleAtFixedRate(timerTask, 0, timeout);
     }
 
     // pickRandomHost picks a random host
