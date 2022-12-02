@@ -19,6 +19,9 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.onosproject.core.CoreService;
+import org.onosproject.net.host.HostStore;
+import org.onosproject.net.device.DeviceStore;
+import org.onosproject.net.packet.PacketStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +36,54 @@ public class StoreDumper {
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected CoreService coreService;
 
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected HostStore hostStore;
+
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected DeviceStore deviceStore;
+
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected PacketStore packetStore;
+
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected StatisticStore statisticStore;
+
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected ResourceStore resourceStore;
+
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected RegionStore regionStore;
+
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected MeterStore meterStore;
+    
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected LinkStore linkStore;
+    
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected DeviceKeyStore deviceKeyStore;
+    
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected IntentStore intentStore;
+    
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected GroupStore groupStore;
+    
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected FlowObjectiveStore flowObjectiveStore;
+    
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected FlowRuleStore flowRuleStore;
+    
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected NetworkConfigStore networkConfigStore;
+    
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected ClusterStore clusterStore;
+    
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    protected ApplicationIdStore applicationIdStore;
+    
     @Activate
     protected void activate() {
         coreService.registerApplication("org.edoardottt.storedumper.app", () -> log.info("Periscope down."));
