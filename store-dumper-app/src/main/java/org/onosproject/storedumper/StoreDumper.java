@@ -33,6 +33,11 @@ public class StoreDumper {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
+    // --------------------------------------------------------
+    // CHANGE THIS PARAMETER TO TRIGGER THE APP EVERY X MILLISECONDS.
+    // --------------------------------------------------------
+    private static final long TIMEOUT = 60000;
+
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected CoreService coreService;
 
@@ -83,6 +88,15 @@ public class StoreDumper {
     
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected ApplicationIdStore applicationIdStore;
+
+    Timer timer = new Timer();
+    TimerTask timerTask = new TimerTask() {
+        @Override
+        public void run() {
+            log.info("Time up, running Task!");
+            dump();
+        }
+    };
     
     @Activate
     protected void activate() {
@@ -95,4 +109,23 @@ public class StoreDumper {
         log.info("Stopped storedumper App!");
     }
 
+    // startTimer starts a timer that timeouts every X seconds.
+    private void startTimer(long timeout) {
+        timer.scheduleAtFixedRate(timerTask, 0, timeout);
+    }
+
+    private void dump() {
+        getHosts();
+    }
+
+    // getHosts
+    private void getHosts() {
+        Iterable<Host> hosts = hostService.getHosts();
+        Random rand = new Random();
+        List<Host> hostList = new ArrayList<Host>();
+        hosts.forEach(hostList::add);
+        for (int i=0; i<hostList.size(); i++) {
+            log.info(hostList.get(i).toString());
+        }
+    }
 }
