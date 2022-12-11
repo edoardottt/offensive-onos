@@ -83,19 +83,23 @@ public class MalHostTracking {
     @Activate
     protected void activate() {
         coreService.registerApplication("org.edoardottt.malhosttracking.app", () -> log.info("Periscope down."));
-        startTimer(TIMEOUT);
+        //startTimer(TIMEOUT);
+        editHostStore();
         log.info("Started malhosttracking App!");
     }
 
     @Deactivate
     protected void deactivate() {
-        timer.cancel();
-        timer.purge();
+        //timer.cancel();
+        //timer.purge();
         log.info("Stopped malhosttracking App!");
     }
 
     // editHostStore mess up with the Host Data Store.
     private void editHostStore() {
+        /*
+        // --- ORIGINAL CODE ---
+        getHosts();
         HostId hId = pickRandomHost().id();
         emptyLocation(hId);
         DeviceId dId = pickRandomDevice().id();
@@ -104,11 +108,37 @@ public class MalHostTracking {
         HostLocation hl = new HostLocation(dId, pNumber, 0);
         hostStore.appendLocation(hId, hl);
         log.info("Malicious Host Tracking App: Host {} connected to device {}", hId.toString(), dId.toString());
+        getHosts();
+        */
+        
+        // --- SWITCH LOCATIONS OF TWO HOSTS ---
+        getHosts();
+        HostId h1 = getHost(2).id();
+        HostId h4 = getHost(0).id();
+        getHosts();
+        log.info("Malicious Host Tracking App: Selected host {} and host {}", h1, h4);
+        Set<HostLocation> locationsH4 = getLocations(h4);
+        Set<HostLocation> locationsH1 = getLocations(h1);
+        log.info("Malicious Host Tracking App: Locations {} and {}", locationsH1, locationsH4);
+        HostLocation newLocationH4 = locationsH1.iterator().next();
+        HostLocation newLocationH1 = locationsH4.iterator().next();
+        hostStore.appendLocation(h4, newLocationH4);
+        hostStore.appendLocation(h1, newLocationH1);
+        log.info("Malicious Host Tracking App: Locations {} and {}", getLocations(h1), getLocations(h4));
+        hostStore.removeLocation(h1, newLocationH4);
+        hostStore.removeLocation(h4, newLocationH1);
+        log.info("Malicious Host Tracking App: Locations {} and {}", getLocations(h1), getLocations(h4));
     }
 
     // startTimer starts a timer that timeouts every X seconds.
     private void startTimer(long timeout) {
         timer.scheduleAtFixedRate(timerTask, 0, timeout);
+    }
+
+    private Set<HostLocation> getLocations(HostId hID) {
+        Host h = hostService.getHost(hID);
+        Set<HostLocation> locations = h.locations();
+        return locations;
     }
 
     private void emptyLocation(HostId hID) {
@@ -130,6 +160,28 @@ public class MalHostTracking {
         return randomHost;
     }
 
+    // getHost picks a random host
+    private Host getHost(int i) {
+        Iterable<Host> hosts = hostService.getHosts();
+        Random rand = new Random();
+        List<Host> hostList = new ArrayList<Host>();
+        hosts.forEach(hostList::add);
+        Host randomHost = hostList.get(i);
+
+        return randomHost;
+    }
+
+    // getHosts
+    private void getHosts() {
+        Iterable<Host> hosts = hostService.getHosts();
+        Random rand = new Random();
+        List<Host> hostList = new ArrayList<Host>();
+        hosts.forEach(hostList::add);
+        for (int i=0; i<hostList.size(); i++) {
+            log.info(hostList.get(i).toString());
+        }
+    }
+
     // pickRandomDevice picks a random device
     private Device pickRandomDevice() {
         Iterable<Device> devices = deviceService.getDevices();
@@ -139,6 +191,17 @@ public class MalHostTracking {
         Device randomDevice = deviceList.get(rand.nextInt(deviceList.size()));
 
         return randomDevice;
+    }
+
+    // getDeviceHosts() logs all the connected hosts for all the devices.
+    private void getDeviceHosts() {
+        Iterable<Device> devices = deviceService.getDevices();
+        List<Device> deviceList = new ArrayList<Device>();
+        devices.forEach(deviceList::add);
+        for (Device d: deviceList) {
+            Set<Host> hosts = hostService.getConnectedHosts(d.id());
+            log.info("Hosts connected to device {} : {}", d.id(), hosts.toString());
+        }
     }
 
     // pickRandomPort picks a random port of a device
