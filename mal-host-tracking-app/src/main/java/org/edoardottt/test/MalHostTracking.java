@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.onosproject.core.CoreService;
 import org.onosproject.net.host.HostService;
-import org.onosproject.net.host.HostService;
 import org.onosproject.net.host.HostStore;
 import org.onosproject.net.Host;
 import org.onosproject.net.HostId;
