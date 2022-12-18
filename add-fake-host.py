@@ -1,6 +1,6 @@
 # Send this IP packet with `python add-fake-host.py`.
-# If Host Location Provider is activated a new host with IP 10.0.0.5 will be added
-# to the host store.
+# If Host Location Provider is activated a new host with IP 10.0.0.5 
+# will be added to the host store.
 
 from scapy.all import *
 
