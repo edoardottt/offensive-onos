@@ -111,7 +111,7 @@ public class MalHostTracking {
          * getHosts();
          */
 
-        /* --- SWITCH LOCATIONS OF TWO HOSTS ---
+        // --- SWITCH LOCATIONS OF TWO HOSTS ---
         getHosts();
         HostId h1 = getHost(2).id();
         HostId h4 = getHost(0).id();
@@ -127,17 +127,6 @@ public class MalHostTracking {
         log.info("Malicious Host Tracking App: Locations {} and {}", getLocations(h1), getLocations(h4));
         hostStore.removeLocation(h1, newLocationH4);
         hostStore.removeLocation(h4, newLocationH1);
-        log.info("Malicious Host Tracking App: Locations {} and {}", getLocations(h1), getLocations(h4));
-        */
-        HostId h1 = getHost(2).id();
-        HostId h4 = getHost(0).id();
-        getHosts();
-        log.info("Malicious Host Tracking App: Selected host {} and host {}", h1, h4);
-        Set<HostLocation> locationsH4 = getLocations(h4);
-        Set<HostLocation> locationsH1 = getLocations(h1);
-        log.info("Malicious Host Tracking App: Locations {} and {}", locationsH1, locationsH4);
-        HostLocation newLocationH4 = locationsH1.iterator().next();
-        hostStore.appendLocation(h4, newLocationH4);
         log.info("Malicious Host Tracking App: Locations {} and {}", getLocations(h1), getLocations(h4));
     }
 
