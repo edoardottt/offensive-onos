@@ -82,34 +82,35 @@ public class MalHostTracking {
     @Activate
     protected void activate() {
         coreService.registerApplication("org.edoardottt.malhosttracking.app", () -> log.info("Periscope down."));
-        //startTimer(TIMEOUT);
+        // startTimer(TIMEOUT);
         editHostStore();
         log.info("Started malhosttracking App!");
     }
 
     @Deactivate
     protected void deactivate() {
-        //timer.cancel();
-        //timer.purge();
+        // timer.cancel();
+        // timer.purge();
         log.info("Stopped malhosttracking App!");
     }
 
     // editHostStore mess up with the Host Data Store.
     private void editHostStore() {
         /*
-        // --- ORIGINAL CODE ---
-        getHosts();
-        HostId hId = pickRandomHost().id();
-        emptyLocation(hId);
-        DeviceId dId = pickRandomDevice().id();
-        List<Port> ports = deviceStore.getPorts(dId);
-        PortNumber pNumber = pickRandomPort(ports).number();
-        HostLocation hl = new HostLocation(dId, pNumber, 0);
-        hostStore.appendLocation(hId, hl);
-        log.info("Malicious Host Tracking App: Host {} connected to device {}", hId.toString(), dId.toString());
-        getHosts();
-        */
-        
+         * // --- ORIGINAL CODE ---
+         * getHosts();
+         * HostId hId = pickRandomHost().id();
+         * emptyLocation(hId);
+         * DeviceId dId = pickRandomDevice().id();
+         * List<Port> ports = deviceStore.getPorts(dId);
+         * PortNumber pNumber = pickRandomPort(ports).number();
+         * HostLocation hl = new HostLocation(dId, pNumber, 0);
+         * hostStore.appendLocation(hId, hl);
+         * log.info("Malicious Host Tracking App: Host {} connected to device {}",
+         * hId.toString(), dId.toString());
+         * getHosts();
+         */
+
         // --- SWITCH LOCATIONS OF TWO HOSTS ---
         getHosts();
         HostId h1 = getHost(2).id();
@@ -176,7 +177,7 @@ public class MalHostTracking {
         Random rand = new Random();
         List<Host> hostList = new ArrayList<Host>();
         hosts.forEach(hostList::add);
-        for (int i=0; i<hostList.size(); i++) {
+        for (int i = 0; i < hostList.size(); i++) {
             log.info(hostList.get(i).toString());
         }
     }
@@ -197,7 +198,7 @@ public class MalHostTracking {
         Iterable<Device> devices = deviceService.getDevices();
         List<Device> deviceList = new ArrayList<Device>();
         devices.forEach(deviceList::add);
-        for (Device d: deviceList) {
+        for (Device d : deviceList) {
             Set<Host> hosts = hostService.getConnectedHosts(d.id());
             log.info("Hosts connected to device {} : {}", d.id(), hosts.toString());
         }
