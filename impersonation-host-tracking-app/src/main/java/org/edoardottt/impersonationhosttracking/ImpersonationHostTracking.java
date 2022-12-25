@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.edoardottt.mitmhosttracking;
+package org.edoardottt.impersonationhosttracking;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -43,10 +43,10 @@ import java.util.Set;
 import java.util.TimerTask;
 
 /**
- * MiTM Host Tracking Application.
+ * Impersonation Host Tracking Application.
  */
 @Component(immediate = true)
-public class MitmHostTracking {
+public class ImpersonationHostTracking {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -81,17 +81,17 @@ public class MitmHostTracking {
 
     @Activate
     protected void activate() {
-        coreService.registerApplication("org.edoardottt.mitmhosttracking.app", () -> log.info("Periscope down."));
+        coreService.registerApplication("org.edoardottt.impersonationhosttracking.app", () -> log.info("Periscope down."));
         // startTimer(TIMEOUT);
         editHostStore();
-        log.info("Started mitmhosttracking App!");
+        log.info("Started impersonationhosttracking App!");
     }
 
     @Deactivate
     protected void deactivate() {
         // timer.cancel();
         // timer.purge();
-        log.info("Stopped mitmhosttracking App!");
+        log.info("Stopped impersonationhosttracking App!");
     }
 
     // editHostStore mess up with the Host Data Store.
@@ -99,35 +99,35 @@ public class MitmHostTracking {
         Iterable<Device> devices = deviceService.getDevices();
         List<Device> deviceList = new ArrayList<Device>();
         devices.forEach(deviceList::add);
-        log.info("MiTM Host Tracking App: Devices {}", deviceList);
+        log.info("Impersonation Host Tracking App: Devices {}", deviceList);
         Device s2 = deviceList.get(1);
         Set<Host> hosts = hostStore.getConnectedHosts(s2.id());
-        log.info("MiTM Host Tracking App: Hosts {}", hosts.toString());
+        log.info("Impersonation Host Tracking App: Hosts {}", hosts.toString());
         List<Host> hostsArray = new ArrayList<>(hosts);
         List<Host> victims = new ArrayList<>();
         Host attacker = hostsArray.get(0);
-        log.info("MiTM Host Tracking App: Attacker {}", attacker.toString());
+        log.info("Impersonation Host Tracking App: Attacker {}", attacker.toString());
         for (Host h : hostsArray) {
             if (!h.equals(attacker)) {
                 victims.add(h);
             }
         }
-        log.info("MiTM Host Tracking App: Victims {}", victims.toString());
+        log.info("Impersonation Host Tracking App: Victims {}", victims.toString());
         changeLocation(getLocations(attacker.id()).iterator().next(), victims);
         for (Host h : victims) {
-            log.info("MiTM Host Tracking App: Victim {} > new Locations {}", h.id(), getLocations(h.id()));
+            log.info("Impersonation Host Tracking App: Victim {} > new Locations {}", h.id(), getLocations(h.id()));
         }
     }
 
     private void changeLocation(HostLocation attacker, List<Host> victims) {
         for (Host h : victims) {
-            log.info("MiTM Host Tracking App: Targeting host {}", h);
+            log.info("Impersonation Host Tracking App: Targeting host {}", h);
             Set<HostLocation> oldLocation = getLocations(h.id());
-            log.info("MiTM Host Tracking App: Victim Locations {}", oldLocation);
+            log.info("Impersonation Host Tracking App: Victim Locations {}", oldLocation);
             hostStore.appendLocation(h.id(), attacker);
-            log.info("MiTM Host Tracking App: Victim Locations {}", getLocations(h.id()));
+            log.info("Impersonation Host Tracking App: Victim Locations {}", getLocations(h.id()));
             hostStore.removeLocation(h.id(), oldLocation.iterator().next());
-            log.info("MiTM Host Tracking App: Victim Locations {}", getLocations(h.id()));
+            log.info("Impersonation Host Tracking App: Victim Locations {}", getLocations(h.id()));
         }
     }
 

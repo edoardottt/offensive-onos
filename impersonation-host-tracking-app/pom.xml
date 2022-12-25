@@ -24,7 +24,7 @@
         <relativePath/><!-- parent is remote -->
     </parent>
 
-    <artifactId>onos-mitmhosttracking</artifactId>
+    <artifactId>onos-impersonationhosttracking</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
@@ -32,9 +32,9 @@
 
     <properties>
         <onos.version>2.7.0</onos.version>
-        <onos.app.name>org.onosproject.mitmhosttracking</onos.app.name>
+        <onos.app.name>org.onosproject.impersonationhosttracking</onos.app.name>
         <onos.app.origin>edoardottt</onos.app.origin>
-        <onos.app.title>mitmhosttracking App</onos.app.title>
+        <onos.app.title>impersonationhosttracking App</onos.app.title>
         <onos.app.category>Monitoring</onos.app.category>
         <onos.app.url>http://onosproject.org</onos.app.url>
     </properties>
