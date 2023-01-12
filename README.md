@@ -40,8 +40,9 @@ Install the application(s)
 github/onos$> ./tools/package/runtime/bin/onos-app localhost install! ~/github/offensive-onos-apps/APPNAME/target/APPNAME-*.oar
 ```
 
-Useful Links:
-  - [Creating and deploying ONOS app](https://www.youtube.com/watch?v=mzQubYhJhro&ab_channel=ThomasVachuska)
+Links
+-----
+- [Thomas Vachuska - Creating and deploying ONOS app](https://www.youtube.com/watch?v=mzQubYhJhro&ab_channel=ThomasVachuska)
 
 Changelog
 -----
