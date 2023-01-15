@@ -1,1 +1,1 @@
-
+- [add-legit-host-mininet.sh](https://github.com/edoardottt/offensive-onos-apps/blob/main/scripts/add-legit-host-mininet.sh) adds a new host in Mininet while the network is up and running
