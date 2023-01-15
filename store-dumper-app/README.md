@@ -1,3 +1,3 @@
 ### Store Dumper
 
-Dump data store contents.
+Dump data store content.
