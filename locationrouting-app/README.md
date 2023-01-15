@@ -1,3 +1,3 @@
 ### Location Routing
 
-(In progress) Delete flow rules of hosts changing locations.
+(WIP) Delete flow rules of hosts changing locations.
