@@ -1,6 +1,6 @@
 # Offensive ONOS Apps
 
-My experiments in weaponizing ONOS applications.
+My experiments in weaponizing [ONOS](https://github.com/opennetworkinglab/onos) applications.
 
 Requirements
 -----
