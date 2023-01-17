@@ -1,6 +1,11 @@
 # Disconnection attack test
 
+<p align="center">
+  <img src="https://github.com/edoardottt/offensive-onos-apps/blob/main/tests/disconnection/Disconnection_CAP_attack.png">
+</p>
 
+How the attack works
+----
 
 ```
 mininet> pingall
