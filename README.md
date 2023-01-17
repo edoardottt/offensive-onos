@@ -1,6 +1,7 @@
 # Offensive ONOS Apps
 
-My experiments in weaponizing [ONOS](https://github.com/opennetworkinglab/onos) applications.
+My experiments in weaponizing [ONOS](https://github.com/opennetworkinglab/onos) applications.  
+Useful Papers to get context: [Cross-App Poisoning in Software-Defined Networking](https://dl.acm.org/doi/10.1145/3243734.3243759), [Classifying Poisoning Attacks in Software Defined Networking](https://ieeexplore.ieee.org/abstract/document/8920310).
 
 Requirements
 -----
