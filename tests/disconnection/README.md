@@ -34,3 +34,8 @@ h3 -> h2 X h4
 h4 -> h1 h2 h3
 *** Results: 25% dropped (9/12 received)
 ```
+This is what is happened:
+  - When H1 tries to ping H2 (so the exact first ICMP request), it actually sends the ICMP echo packet; the Host Location Provider is active and so it writes the right location of H1 in the Host Data Store.
+  - Now H1 can ping normally H2 and H4, but not H3 because the reactive forwarding app is installing flow rules for the wrong location.
+  - H3 will be connected again to the network when it sends a packet containing its IP or MAC address (IP / ARP).
+
