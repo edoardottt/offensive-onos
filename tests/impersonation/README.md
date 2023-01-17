@@ -14,10 +14,12 @@ Then, the malicious application [impersonation-host-tracking-app](https://github
 
 At the end of the attack, hosts H2, H3 and H4 will have the exact same location (the one highlighted in red, the starting one of H2).  
 Now we just need to execute:
-  - `h2 tcpdump > impersonation.pcap &`
+  - `h2 tcpdump > impersonation-h2.pcap &`
+  - `h4 tcpdump > impersonation-h4.pcap &`
   - `h1 ping h4`
 
-We can observe that in the file impersonation.pcap H2 will receive ICMP echo requests from H1, meaning that attack succeeded. H2 then can impersonate H4 sending ICMP echo replies back to H1.  
+We can observe that in the file impersonation-h2.pcap H2 will receive ICMP echo requests from H1, meaning that attack succeeded. H2 then can impersonate H4 sending ICMP echo replies back to H1.  
+Instead, if we observe impersonation-h4.pcap, we can notice that H4 never receives ICMP echo requests from H1. 
 
 > **Note**
 > This attack is successful because there are no flow rules installed in the switches (due to cache timeout) ruling the flows between H1 and H4. So, when a switch gets a flow rule table miss it will ask directly to the ONOS controller where the packer should go and the controller will reply installing flow rules based on H4 location (but now it is the fake one!).
