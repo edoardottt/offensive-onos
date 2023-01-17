@@ -2,10 +2,15 @@
 
 Impersonate legitimate hosts poisoning the host store with fake locations.
 
-Test with [mitmhosttracking-topo.py](https://github.com/edoardottt/offensive-onos-apps/blob/main/mininet/mitmhosttracking-topo.py).
 
 How to use
 -----
+
+Set up data plane using Mininet (use [mitmhosttracking-topo.py](https://github.com/edoardottt/offensive-onos-apps/blob/main/mininet/mitmhosttracking-topo.py) and your ONOS IP address):
+```console
+sudo mn --mac --custom mitmhosttracking-topo.py --topo mytopo --controller remote,ip=192.168.1.8 --switch ovs,protocols=OpenFlow13
+```
+
 
 Compile and check for errors:
 ```console
