@@ -7,7 +7,9 @@ Useful Papers to get context: [Cross-App Poisoning in Software-Defined Networkin
 Requirements
 -----
 
+- JVM 11+ (https://www.oracle.com/java/technologies/downloads/)
 - Maven (https://maven.apache.org/)
+- ONOS 2.7.0 (https://wiki.onosproject.org/display/ONOS/Downloads)
 
 Links
 -----
