@@ -11,6 +11,8 @@ Requirements
 - Maven (https://maven.apache.org/)
 - ONOS 2.7.0 (https://wiki.onosproject.org/display/ONOS/Downloads)
 
+In order to test the applications I've used Mininet, but it's optional (https://github.com/mininet/mininet/releases/).
+
 Links
 -----
 - [Thomas Vachuska - Creating and deploying ONOS app](https://www.youtube.com/watch?v=mzQubYhJhro&ab_channel=ThomasVachuska)
