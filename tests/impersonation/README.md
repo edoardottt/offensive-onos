@@ -7,6 +7,15 @@
 How the attack works
 ----
 First of all, the network is composed as the figure shows: every host can reach other hosts and the test `pingall` in Mininet passes with 100% success rate.  
+```
+mininet> pingall
+*** Ping: testing ping reachbility
+h1 -> h2 h3 h4
+h2 -> h1 h3 h4
+h3 -> h2 h3 h4
+h4 -> h1 h2 h3
+*** Results: 0% dropped (12/12 received)
+```
 Then, the malicious application [impersonation-host-tracking-app](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/impersonation-host-tracking-app) is installed and activated in ONOS. When activated, it starts immediately poisoning the Host Data Store:
   - It finds the location of host H2
   - Empty the locations of H3 and H4
