@@ -31,10 +31,7 @@ import org.onosproject.net.HostLocation;
 import org.onosproject.net.device.DeviceService;
 import org.onosproject.net.device.DeviceStore;
 import org.onosproject.net.Device;
-import org.onosproject.net.DeviceId;
 import org.onosproject.net.Port;
-import org.onosproject.net.PortNumber;
-import org.onosproject.core.ApplicationId;
 import java.util.Timer;
 import java.util.Random;
 import java.util.ArrayList;
@@ -163,7 +160,6 @@ public class MalHostTracking {
     // getHost picks a random host
     private Host getHost(int i) {
         Iterable<Host> hosts = hostService.getHosts();
-        Random rand = new Random();
         List<Host> hostList = new ArrayList<Host>();
         hosts.forEach(hostList::add);
         Host randomHost = hostList.get(i);
@@ -174,7 +170,6 @@ public class MalHostTracking {
     // getHosts
     private void getHosts() {
         Iterable<Host> hosts = hostService.getHosts();
-        Random rand = new Random();
         List<Host> hostList = new ArrayList<Host>();
         hosts.forEach(hostList::add);
         for (int i = 0; i < hostList.size(); i++) {
