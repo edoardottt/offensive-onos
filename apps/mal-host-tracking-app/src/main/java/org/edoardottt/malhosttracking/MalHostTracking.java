@@ -124,7 +124,7 @@ public class MalHostTracking {
         log.info("Malicious Host Tracking App: Locations {} and {}", getLocations(h1), getLocations(h4));
         hostStore.removeLocation(h1, newLocationH4);
         hostStore.removeLocation(h4, newLocationH1);
-        log.info("Malicious Host Tracking App: Locations {} and {}", getLocations(h1), getLocations(h4));
+        log.info("Malicious Host Tracking App: Locations successfully poisoned: {} and {}", getLocations(h1), getLocations(h4));
     }
 
     // startTimer starts a timer that timeouts every X seconds.

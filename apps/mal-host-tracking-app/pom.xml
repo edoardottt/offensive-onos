@@ -28,7 +28,7 @@
     <version>2.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <description>Test sample application</description>
+    <description>Malicious Host Tracking application</description>
 
     <properties>
         <onos.version>2.7.0</onos.version>
