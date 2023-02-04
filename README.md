@@ -20,6 +20,7 @@ In order to test the applications I've used Mininet, but it's optional (https://
 Links
 -----
 - [Thomas Vachuska - Creating and deploying ONOS app](https://www.youtube.com/watch?v=mzQubYhJhro&ab_channel=ThomasVachuska)
+- [Get Started With Mininet](http://mininet.org/download/)
 
 Changelog
 -----
