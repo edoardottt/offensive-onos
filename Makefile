@@ -1,5 +1,5 @@
 compile:
-	@mvn compile 
+	@mvn package -DskipTests 
 	@echo "Done."
 
 install:
