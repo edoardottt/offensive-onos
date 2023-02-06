@@ -22,7 +22,7 @@ Get Started
 
 Compile an ONOS application ready to be installed and activated
 ```console
-make -C apps/app-name compile
+make -C apps/APP-NAME compile
 ```
 
 Links
