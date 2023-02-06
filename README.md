@@ -25,6 +25,11 @@ Compile an ONOS application ready to be installed and activated
 make -C apps/APP-NAME compile
 ```
 
+Search for .oar (ONOS archive) files
+```console
+make oar
+```
+
 Links
 -----
 - [Thomas Vachuska - Creating and deploying ONOS app](https://www.youtube.com/watch?v=mzQubYhJhro&ab_channel=ThomasVachuska)
