@@ -17,6 +17,14 @@ Requirements
 
 In order to test the applications I've used Mininet, but it's optional (https://github.com/mininet/mininet/releases/).
 
+Get Started
+-----
+
+Compile an ONOS application ready to be installed and activated
+```console
+make -C apps/app-name compile
+```
+
 Links
 -----
 - [Thomas Vachuska - Creating and deploying ONOS app](https://www.youtube.com/watch?v=mzQubYhJhro&ab_channel=ThomasVachuska)
