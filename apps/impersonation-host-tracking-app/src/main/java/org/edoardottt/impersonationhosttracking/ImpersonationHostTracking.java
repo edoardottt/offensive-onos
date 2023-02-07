@@ -12,7 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * @author edoardottt, https://www.edoardoottavianelli.it/
  */
+
 package org.edoardottt.impersonationhosttracking;
 
 import org.osgi.service.component.annotations.Activate;
@@ -31,10 +34,7 @@ import org.onosproject.net.HostLocation;
 import org.onosproject.net.device.DeviceService;
 import org.onosproject.net.device.DeviceStore;
 import org.onosproject.net.Device;
-import org.onosproject.net.DeviceId;
 import org.onosproject.net.Port;
-import org.onosproject.net.PortNumber;
-import org.onosproject.core.ApplicationId;
 import java.util.Timer;
 import java.util.Random;
 import java.util.ArrayList;
@@ -81,7 +81,8 @@ public class ImpersonationHostTracking {
 
     @Activate
     protected void activate() {
-        coreService.registerApplication("org.edoardottt.impersonationhosttracking.app", () -> log.info("Periscope down."));
+        coreService.registerApplication("org.edoardottt.impersonationhosttracking.app",
+                () -> log.info("Periscope down."));
         // startTimer(TIMEOUT);
         editHostStore();
         log.info("Started impersonationhosttracking App!");
