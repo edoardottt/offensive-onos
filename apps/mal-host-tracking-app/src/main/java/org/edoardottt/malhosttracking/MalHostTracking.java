@@ -12,7 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * @author edoardottt, https://www.edoardoottavianelli.it/
  */
+
 package org.edoardottt.malhosttracking;
 
 import org.osgi.service.component.annotations.Activate;
@@ -124,7 +127,8 @@ public class MalHostTracking {
         log.info("Malicious Host Tracking App: Locations {} and {}", getLocations(h1), getLocations(h4));
         hostStore.removeLocation(h1, newLocationH4);
         hostStore.removeLocation(h4, newLocationH1);
-        log.info("Malicious Host Tracking App: Locations successfully poisoned: {} and {}", getLocations(h1), getLocations(h4));
+        log.info("Malicious Host Tracking App: Locations successfully poisoned: {} and {}", getLocations(h1),
+                getLocations(h4));
     }
 
     // startTimer starts a timer that timeouts every X seconds.
