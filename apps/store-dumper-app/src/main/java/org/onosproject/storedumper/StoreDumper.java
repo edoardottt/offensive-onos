@@ -12,7 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * @author edoardottt, https://www.edoardoottavianelli.it/
  */
+
 package org.onosproject.storedumper;
 
 import org.osgi.service.component.annotations.Activate;
@@ -45,10 +48,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.io.File;
-import java.nio.file.Files;
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.io.FileWriter;
@@ -103,31 +104,31 @@ public class StoreDumper {
 
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected MeterStore meterStore;
-    
+
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected LinkStore linkStore;
-    
+
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected DeviceKeyStore deviceKeyStore;
-    
+
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected IntentStore intentStore;
-    
+
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected GroupStore groupStore;
-    
+
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected FlowObjectiveStore flowObjectiveStore;
-    
+
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected FlowRuleStore flowRuleStore;
-    
+
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected NetworkConfigStore networkConfigStore;
-    
+
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected ClusterStore clusterStore;
-    
+
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected ApplicationIdStore applicationIdStore;
 
@@ -139,7 +140,7 @@ public class StoreDumper {
             dump();
         }
     };
-    
+
     @Activate
     protected void activate() {
         coreService.registerApplication("org.edoardottt.storedumper.app", () -> log.info("Periscope down."));
@@ -173,7 +174,7 @@ public class StoreDumper {
         Iterable<Host> hosts = hostService.getHosts();
         List<Host> hostList = new ArrayList<Host>();
         hosts.forEach(hostList::add);
-        for (int i=0; i<hostList.size(); i++) {
+        for (int i = 0; i < hostList.size(); i++) {
             writeToFile(hostList.get(i).toString());
         }
     }
@@ -184,7 +185,7 @@ public class StoreDumper {
         Iterable<Device> devices = deviceService.getDevices();
         List<Device> deviceList = new ArrayList<Device>();
         devices.forEach(deviceList::add);
-        for (int i=0; i<deviceList.size(); i++) {
+        for (int i = 0; i < deviceList.size(); i++) {
             writeToFile(deviceList.get(i).toString());
         }
     }
