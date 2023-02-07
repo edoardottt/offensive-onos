@@ -12,7 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * @author edoardottt, https://www.edoardoottavianelli.it/
  */
+
 package org.onosproject.locationrouting;
 
 import java.util.Collection;
@@ -23,7 +26,6 @@ import org.onosproject.core.ApplicationId;
 import org.onosproject.core.CoreService;
 import org.onosproject.net.Device;
 import org.onosproject.net.device.DeviceService;
-import org.onosproject.net.DeviceId;
 import org.onosproject.net.flow.criteria.Criterion;
 import org.onosproject.net.flow.criteria.Criterion.Type;
 import org.onosproject.net.flow.criteria.EthCriterion;
@@ -74,7 +76,8 @@ public class LocationRouting {
 
     @Activate
     protected void activate() {
-        appId = coreService.registerApplication("org.edoardottt.locationrouting.app", () -> log.info("Periscope down."));
+        appId = coreService.registerApplication("org.edoardottt.locationrouting.app",
+                () -> log.info("Periscope down."));
         eventExecutor = newSingleThreadScheduledExecutor(groupedThreads("onos/locationrouting", "events-%d", log));
         hostService.addListener(hostListener);
         log.info("Started locationrouting App!");
@@ -100,9 +103,10 @@ public class LocationRouting {
     }
 
     /**
-    * For a given host, remove any flow rule which references it's addresses.
-    * @param host the host to clean up for
-    */
+     * For a given host, remove any flow rule which references it's addresses.
+     * 
+     * @param host the host to clean up for
+     */
     private void cleanup(Host host) {
         Iterable<Device> devices = deviceService.getDevices();
         List<FlowRule> flowRules = Lists.newLinkedList();
