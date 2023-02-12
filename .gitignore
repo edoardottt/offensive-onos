@@ -1,6 +1,9 @@
 .vscode/
 target/
 
+# ONOS store dump files
+*.dump
+
 # Compiled class file
 *.class
 
