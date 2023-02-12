@@ -5,6 +5,7 @@ This is a part of research activity for my Cybersecurity M.Sc. Thesis, focused o
 
 Useful Papers to get context: 
   - [Cross-App Poisoning in Software-Defined Networking](https://dl.acm.org/doi/10.1145/3243734.3243759)
+  - [Protecting Virtual Programmable Switches from Cross-App Poisoning (CAP) Attacks](https://ieeexplore.ieee.org/document/9789775)
   - [Classifying Poisoning Attacks in Software Defined Networking](https://ieeexplore.ieee.org/abstract/document/8920310)
   - [A Survey on Software Defined Networking: Architecture for Next Generation Network](https://arxiv.org/abs/2001.10165)
 
