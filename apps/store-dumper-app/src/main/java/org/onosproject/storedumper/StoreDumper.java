@@ -52,6 +52,7 @@ import java.text.SimpleDateFormat;
 import java.io.File;
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import org.slf4j.Logger;
@@ -73,7 +74,7 @@ public class StoreDumper {
     // --------------------------------------------------------
     // CHANGE THIS PARAMETER TO WRITE IN A DIFFERENT FILE.
     // --------------------------------------------------------
-    private static final String FILENAME = "/home/edoardottt/cybersecurity/todo/Thesis/onos-dump.txt";
+    private static final String FILENAME = "/home/edoardottt/cybersecurity/thesis/onos-store.dump";
 
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected CoreService coreService;
@@ -193,9 +194,12 @@ public class StoreDumper {
     private File createFile() {
         try {
             File myObj = new File(FILENAME);
+            if (!myObj.exists()) {
+                myObj.createNewFile();
+            }
             return myObj;
         } catch (Exception e) {
-            log.info("Error while creating file {}", FILENAME);
+            log.info("ONOS-DT | Error while creating file {}", FILENAME);
             e.printStackTrace();
         }
 
@@ -212,7 +216,10 @@ public class StoreDumper {
             log.info("Successfully wrote to the file!");
         } catch (IOException e) {
             log.info("Error while writing to file {}", FILENAME);
-            e.printStackTrace();
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            log.info(sw.toString());
         }
     }
 }
