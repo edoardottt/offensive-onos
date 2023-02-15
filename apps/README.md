@@ -1,1 +1,2 @@
 - [impersonation-host-tracking-app](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/impersonation-host-tracking-app): Impersonate legitimate hosts poisoning the host store with fake locations.
+- [locationrouting-app](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/locationrouting-app): (WIP) Delete flow rules of hosts changing locations.
