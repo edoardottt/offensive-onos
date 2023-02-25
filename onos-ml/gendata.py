@@ -32,7 +32,7 @@ def generate_cap_attacks():
 
     # getHost and/or forward (even 0)
     comb = []
-    for i in range(10):
+    for i in range(12):
         comb += [p for p in itertools.product(apps["org.onosproject.fwd"], repeat=i)]
     for elem in comb:
         if len(elem) > 0:
@@ -41,7 +41,7 @@ def generate_cap_attacks():
 
     # appendLocation and/or RemoveLocation (at least 1)
     comb = []
-    for i in range(1, 10):
+    for i in range(1, 13):
         comb += [
             p
             for p in itertools.product(
@@ -60,12 +60,17 @@ def generate_cap_attacks():
 
     # getHost and/or forward (at least 1 forward)
     comb = []
-    for i in range(1, 10):
+    for i in range(1, 13):
         comb += [p for p in itertools.product(apps["org.onosproject.fwd"], repeat=i)]
     count = 0
     for lista in comb:
-        if count < len(result):
-            result[count] += "org.onosproject.fwd " + " org.onosproject.fwd ".join(elem)
+        if count < len(result) and not (
+            len(list(set(comb))) == 1
+            and list(set(comb))[0] == apps["org.onosproject.fwd"][0]
+        ):
+            result[count] += "org.onosproject.fwd " + " org.onosproject.fwd ".join(
+                lista
+            )
             count += 1
 
     for i in range(len(result)):
@@ -179,9 +184,12 @@ if __name__ == "__main__":
     cap_attacks = generate_cap_attacks()
     not_cap_attacks = generate_not_cap_attacks()
 
-    listA, listB = create_datasets(cap_attacks, not_cap_attacks, 80)
+    listA, listB = create_datasets(cap_attacks, not_cap_attacks, 90)
 
     mlA, mlB = trasform(listA[:], listB[:])
+
+    print("[ + ] Training files contain {} entries!".format(str(len(listA))))
+    print("[ + ] Test files contain {} entries!".format(str(len(listB))))
 
     write_file(training_out_file, listA)
     write_file(test_out_file, listB)
