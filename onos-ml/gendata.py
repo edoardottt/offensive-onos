@@ -29,19 +29,21 @@ action_name = {"getHost": 3, "forward": 4, "appendLocation": 5, "removeLocation"
 
 def generate_cap_attacks():
     result = []
+    temp = []
 
     # getHost and/or forward (even 0)
     comb = []
-    for i in range(12):
+    for i in range(6):
         comb += [p for p in itertools.product(apps["org.onosproject.fwd"], repeat=i)]
     for elem in comb:
         if len(elem) > 0:
-            to_add = "org.onosproject.fwd " + " org.onosproject.fwd ".join(elem) + space
-            result += [to_add]
+            to_add = "org.onosproject.fwd" + "org.onosproject.fwd".join(elem)
+            temp += [to_add]
 
     # appendLocation and/or RemoveLocation (at least 1)
     comb = []
-    for i in range(1, 13):
+    temp2 = []
+    for i in range(1, 5):
         comb += [
             p
             for p in itertools.product(
@@ -50,28 +52,23 @@ def generate_cap_attacks():
         ]
     count = 0
     for lista in comb:
-        if count < len(result):
-            result[count] += (
-                "org.edoardottt.malhosttracking.app "
-                + " org.edoardottt.malhosttracking.app ".join(lista)
-                + space
+        for elem in temp:
+            to_add = (
+                "org.edoardottt.malhosttracking.app"
+                + "org.edoardottt.malhosttracking.app".join(lista)
             )
-            count += 1
+            temp2 += [to_add]
 
     # getHost and/or forward (at least 1 forward)
     comb = []
-    for i in range(1, 13):
+    for i in range(1, 6):
         comb += [p for p in itertools.product(apps["org.onosproject.fwd"], repeat=i)]
-    count = 0
     for lista in comb:
-        if count < len(result) and not (
-            len(list(set(comb))) == 1
-            and list(set(comb))[0] == apps["org.onosproject.fwd"][0]
-        ):
-            result[count] += "org.onosproject.fwd " + " org.onosproject.fwd ".join(
-                lista
-            )
-            count += 1
+        for elem in temp2:
+            if not (len(list(set(lista))) == 1 and list(set(lista))[0] == "getHost"):
+                result += [
+                    elem + "org.onosproject.fwd" + "org.onosproject.fwd".join(lista)
+                ]
 
     for i in range(len(result)):
         result[i] = result[i] + tab + str(1)
@@ -86,16 +83,16 @@ def generate_not_cap_attacks():
 
     # getHost and/or forward (even 0)
     comb = []
-    for i in range(15):
+    for i in range(16):
         comb += [p for p in itertools.product(apps["org.onosproject.fwd"], repeat=i)]
     for elem in comb:
         if len(elem) > 0:
-            to_add = "org.onosproject.fwd " + " org.onosproject.fwd ".join(elem) + space
+            to_add = "org.onosproject.fwd" + "org.onosproject.fwd".join(elem)
             result += [to_add]
 
     # getHost and/or forward (even 0)
     comb = []
-    for i in range(15):
+    for i in range(16):
         comb += [
             p
             for p in itertools.product(
@@ -105,9 +102,8 @@ def generate_not_cap_attacks():
     for elem in comb:
         if len(elem) > 0:
             to_add = (
-                "org.edoardottt.malhosttracking.app "
-                + " org.edoardottt.malhosttracking.app ".join(elem)
-                + space
+                "org.edoardottt.malhosttracking.app"
+                + "org.edoardottt.malhosttracking.app".join(elem)
             )
             result += [to_add]
 
@@ -191,7 +187,7 @@ if __name__ == "__main__":
     print("[ + ] Training files contain {} entries!".format(str(len(listA))))
     print("[ + ] Test files contain {} entries!".format(str(len(listB))))
 
-    write_file(training_out_file, listA)
-    write_file(test_out_file, listB)
+    # write_file(training_out_file, listA)
+    # write_file(test_out_file, listB)
     write_file(training_out_file_ml, mlA)
     write_file(test_out_file_ml, mlB)
