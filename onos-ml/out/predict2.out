@@ -1,6 +1,6 @@
 Start time: 07:36:29
+ ----------- Training data -----------
 Read 200000/200000 lines
- ----------- Train data -----------
 Model score: 0.987855
 Model confusion matrix: 
 [[105765   2121]

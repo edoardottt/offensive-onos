@@ -70,6 +70,8 @@ if __name__ == "__main__":
     t1 = datetime.strptime(str(start_time), "%H:%M:%S")
     print("Start time:", t1.time())
 
+    print(" ----------- Training data -----------")
+
     x, y = read_file(training_out_file_ml, 200000)
 
     clf = KNeighborsClassifier(n_neighbors=3)
@@ -79,8 +81,6 @@ if __name__ == "__main__":
     # print("Model intercept: " + str(clf.intercept_))
 
     # print("Model coef: " + str(clf.coef_))
-
-    print(" ----------- Train data -----------")
 
     print("Model score: " + str(clf.score(x, y)))
 
