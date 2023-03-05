@@ -1,0 +1,15 @@
+Start time: 07:36:29
+Read 200000/200000 lines
+ ----------- Train data -----------
+Model score: 0.987855
+Model confusion matrix: 
+[[105765   2121]
+ [   308  91806]]
+ ----------- Test data -----------
+Read 40000/40000 lines
+Model score: 0.975075
+Model confusion matrix: 
+[[20758   816]
+ [  181 18245]]
+End time: 07:56:55
+Time difference is 1226.0 seconds
