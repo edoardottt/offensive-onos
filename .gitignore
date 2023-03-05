@@ -1,3 +1,5 @@
+onos-ml/data*
+
 .vscode/
 target/
 
