@@ -1,4 +1,5 @@
 - [impersonation-host-tracking-app](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/impersonation-host-tracking-app): Impersonate legitimate hosts poisoning the host store with fake locations.
 - [locationrouting-app](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/locationrouting-app): (WIP) Delete flow rules of hosts changing locations.
 - [mal-host-tracking-app](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/mal-host-tracking-app): Disconnect hosts poisoning the host store with fake locations.
+- [xssdevice-app](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/xssdevice-app): Deliver XSS payload using a CAP attack.
 - [store-dumper-app](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/store-dumper-app): Dump data stores content.
