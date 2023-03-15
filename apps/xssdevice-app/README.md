@@ -1,7 +1,7 @@
 # XSS Device Application
 
 This application exploits [CVE-2017-1000078](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-1000078) in ONOS 1.9.0 ([docker image](https://hub.docker.com/layers/onosproject/onos/1.9.0/images/sha256-15736a6740918e9dd7df2dd1287ee52e22be5ad45ba8b6c4400afeca9a66ff51)).  
-This is an importat Proof of Concept because it's the first Cross App Poisoning attack targeting Web resources; before it was ony about network related attacks.  
+This is an importat Proof of Concept because it's the first Cross App Poisoning attack targeting Web resources; before it was only about network related attacks.  
 This application overwrites some information of an existing device with HTML/JS payload resulting in a stored XSS attack.
 
 How to use
