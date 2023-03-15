@@ -1,5 +1,4 @@
-onos-ml/data*
-trash/
+onos-dm/data*
 .vscode/
 target/
 
