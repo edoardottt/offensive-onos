@@ -8,7 +8,7 @@ How to use
 
 Set up data plane using Mininet (use [mitmhosttracking-topo.py](https://github.com/edoardottt/offensive-onos-apps/blob/main/mininet/mitmhosttracking-topo.py) and your ONOS IP address):
 ```console
-sudo mn --mac --custom mitmhosttracking-topo.py --topo mytopo --controller remote,ip=192.168.1.8 --switch ovs,protocols=OpenFlow13
+sudo mn --mac --custom impersonation.py --topo impersonation --controller remote,ip=192.168.1.8 --switch ovs,protocols=OpenFlow13
 ```
 
 
