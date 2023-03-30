@@ -16,7 +16,7 @@ class SingleSwitchTopo(Topo):
         self.addLink(switch1, h1)
         switch2 = self.addSwitch('s2')
         # Python's range(N) generates 0..N-1
-       	for h in range(1, n):
+        for h in range(1, n):
             host = self.addHost('h%s' % (h + 1))
             self.addLink(host, switch2)
 
