@@ -18,8 +18,8 @@ h4 -> h1 h2 h3
 ```
 Then, the malicious application [impersonation-host-tracking-app](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/impersonation-host-tracking-app) is installed and activated in ONOS. When activated, it starts immediately poisoning the Host Data Store:
   - It finds the location of host H2
-  - Empty the locations of H3 and H4
   - Put the location of H2 in the array of locations of H3 and H4
+  - Delete old locations of H3 and H4
 
 At the end of the attack, hosts H2, H3 and H4 will have the exact same location (the one highlighted in red, the starting one of H2).  
 Now we just need to execute:
