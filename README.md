@@ -1,4 +1,4 @@
-# Offensive ONOS Applications
+# Offensive ONOS
 
 My experiments in weaponizing [ONOS](https://github.com/opennetworkinglab/onos) applications.  
 This is a part of research activity for my Cybersecurity M.Sc. Thesis, focused on detection of Cross App Poisoning Attacks in Software Defined Networks.  
