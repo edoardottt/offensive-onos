@@ -2,6 +2,9 @@ onos-dm/data*
 .vscode/
 target/
 
+# ONOS compiled apps
+*.oar
+
 # ONOS store dump files
 *.dump
 
