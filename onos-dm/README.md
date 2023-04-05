@@ -14,4 +14,5 @@ Model score: 0.975075
 Model confusion matrix: 
 [[20758   816]
  [  181 18245]]
+The test ran for 1199.0 seconds
 ```
