@@ -1,4 +1,4 @@
-# Add a host in mininet while the network is up nd running.
+# Add a host in mininet while the network is up and running.
 
 py net.addHost('h5')
 py net.addLink(s4, net.get('h5'))
