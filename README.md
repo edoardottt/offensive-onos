@@ -48,3 +48,7 @@ Contributing
 -------
 
 Just open an [issue](https://github.com/edoardottt/offensive-onos-apps/issues) / [pull request](https://github.com/edoardottt/offensive-onos-apps/pulls).
+
+-------
+
+[edoardoottavianelli.it](https://www.edoardoottavianelli.it/) to contact me.
