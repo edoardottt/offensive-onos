@@ -2,7 +2,6 @@ These files are intended to help/build/use data mining in ONOS in order to detec
 
 Results obtained with gendata2 & predict2 (K-nearest neighbours, K = 3):
 ```
-Start time: 16:19:45
  ----------- Training data -----------
 Read 1000/1000 lines
 Model score: 0.975
@@ -15,7 +14,6 @@ Model score: 0.98
 Model confusion matrix: 
 [[105   4]
  [  0  91]]
-End time: 16:19:45
 Time difference is 0.0 seconds
 ```
 ```
