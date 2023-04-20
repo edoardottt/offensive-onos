@@ -124,7 +124,6 @@ public class EventHostTracking {
 
     // editHostStore mess up with the Host Data Store.
     private void editHostStore() {
-
         /*
          * try {
          * Device d = pickRandomDevice();
