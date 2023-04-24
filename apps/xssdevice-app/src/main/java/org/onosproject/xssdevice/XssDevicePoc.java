@@ -33,19 +33,10 @@ import org.onosproject.net.device.DefaultDeviceDescription;
 import org.onosproject.net.provider.ProviderId;
 import java.io.StringWriter;
 import java.io.PrintWriter;
-import org.onosproject.net.host.HostService;
-import org.onosproject.net.host.HostStore;
-import org.onosproject.net.Host;
-import org.onosproject.net.HostId;
-import org.onosproject.net.HostLocation;
 import org.onosproject.net.device.DeviceService;
-import org.onosproject.net.Port;
-import java.util.Timer;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TimerTask;
 
 /**
  * XSS device POC application
