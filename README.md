@@ -1,7 +1,7 @@
 # Offensive ONOS
 
 My experiments in weaponizing [ONOS](https://github.com/opennetworkinglab/onos) applications.  
-This is a part of research activity for my Cybersecurity M.Sc. Thesis, focused on detection of Cross App Poisoning Attacks in Software Defined Networks.  
+This is a part of research activity for my Cybersecurity M.Sc. Thesis ([link](https://github.com/edoardottt/master-degree-thesis/)), focused on detection of Cross App Poisoning Attacks in Software Defined Networks.  
 
 **This research also led to discovery of [CVE-2023-24279](https://nvd.nist.gov/vuln/detail/CVE-2023-24279) and [CVE-2023-30093](https://nvd.nist.gov/vuln/detail/CVE-2023-30093)**.
 
