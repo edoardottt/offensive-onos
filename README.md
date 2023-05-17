@@ -18,7 +18,7 @@ Requirements
 - Maven (https://maven.apache.org/)
 - ONOS 2.7.0 (https://wiki.onosproject.org/display/ONOS/Downloads)
 
-In order to test the applications I've used Mininet, but it's optional (https://github.com/mininet/mininet/releases/).
+In order to test the applications I've used Mininet to virtualize the data-plane, but it's optional (https://github.com/mininet/mininet/releases/).
 
 Get Started
 -----
