@@ -11,6 +11,7 @@ Useful papers to get context:
   - [Protecting Virtual Programmable Switches from Cross-App Poisoning (CAP) Attacks](https://ieeexplore.ieee.org/document/9789775)
   - [Classifying Poisoning Attacks in Software Defined Networking](https://ieeexplore.ieee.org/abstract/document/8920310)
   - [A Survey on Software Defined Networking: Architecture for Next Generation Network](https://arxiv.org/abs/2001.10165)
+  - [my master's degree thesis](https://github.com/edoardottt/master-degree-thesis/)
 
 Requirements
 -----
