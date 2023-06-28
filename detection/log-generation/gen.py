@@ -17,9 +17,9 @@ stores = ['n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 new_app = random.choice(apps)
 
 def gen_apis():
-    '''
+    """
     This function generates a random API dictionary.
-    '''
+    """
     result = {}
     i = 0
     for store in stores:
@@ -38,7 +38,7 @@ cap_interval = 1000     # time between a potential CAP attack and another (in ms
 api_interval = 100      # time between an API call and another (in ms)
 log_file = "test.log"
 
-cap_lengths = [3]
+cap_lengths = [3, 5, 7]
 
 
 # ----------- functions -----------
@@ -70,17 +70,21 @@ def gen_cap_logs(p = 50):
     This function generates CAP attack logs based on the
     probability value passed as input.
     '''
-    pass
     count = 0
     with open(log_file, 'w+') as f:
         ts_app = random.randint(0, cap_interval)
-        accessible_ds = ['n', 'o']
+        accessible_ds = random.choices(stores, k = 2)
         while ts_app <= ms_end:
             if random.randint(0, 100) < p:
                 # cap
-                cap_elements = [new_app, random.choice(apps), random.choice(cap_lengths)]
-                print(cap_elements)
-                pass
+                cap_sequence = gen_cap_sequence(pick_target_app(), accessible_ds, random.choice(cap_lengths))
+                cap_elements = build_cap_logs(ts_app, cap_sequence)
+                for log in cap_elements:
+                    log = " ".join(log)
+                    f.write(log + "\n")
+                count += 1
+                sys.stdout.flush()
+                print("Generated {} CAP attacks!".format(count), flush=True, end="\r")
             else:
                 # no cap (random API call)
                 api = random_api_call(random.choice(accessible_ds))
@@ -89,19 +93,9 @@ def gen_cap_logs(p = 50):
                 f.write(log + "\n")
 
             ts_app = ts_app + cap_interval
-
-            """
-            log = " ".join(log_elements)
-            f.write(log + "\n")
-            ts_app = ts_app + api_interval
-            count += 1
-            sys.stdout.flush()
-            print("Generated {} logs!".format(count), flush=True, end="\r")
-            """
-    # at each step (defined by cap_interval):
-    # check if new CAP or not
-    # if not: the app A performs a random API call
-    # if CAP: generate a CAP tuple and add that to log file
+    
+    f.close()
+    print()
 
 
 def gen_cap_sequence(target, accessible_ds, length):
@@ -169,10 +163,35 @@ def find_api(action, store):
     return None
 
 
+def pick_target_app():
+    """
+    Return an app different from the app under test. 
+    """
+    result = None
+    while result is None or result == new_app:
+        result = random.choice(apps)
+    return result
+
+
+def build_cap_logs(ts_app, cap_sequence):
+    """
+    Return a sequence of logs from a CAP attack API sequence.
+    """
+    delta = cap_interval // len(cap_sequence)
+    result = []
+    drift = 0
+    for elem in cap_sequence:
+        elem_cap = [str(ts_app + drift), str(elem[0]), str(elem[1]), "params"]
+        result.append(elem_cap)
+        drift += delta
+    return result
+
+
 if __name__ == "__main__":
     for x in apis:
         print(x, apis[x])
     print("-------------------")
     #gen_legitimate_logs()
-    #gen_cap_logs()
-    print(gen_cap_sequence('e', ['n', 'o'], 7))
+    gen_cap_logs()
+    #cap_sequence = gen_cap_sequence('e', ['n', 'o'], 7)
+    #print(build_cap_logs(100, cap_sequence))
