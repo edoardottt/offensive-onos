@@ -1,8 +1,8 @@
-'''
-Generate logs for CAP attack simulation
+"""
+Generate logs for CAP attacks detection simulation
 
 https://github.com/edoardottt/offensive-onos
-'''
+"""
 
 # ----------- import -----------
 
@@ -37,7 +37,7 @@ ms_end = 10000000       # end time (in milliseconds)
 cap_interval = 1000     # time between a potential CAP attack and another (in ms)
 api_interval = 100      # time between an API call and another (in ms)
 log_file = "test.log"
-
+logs = []
 cap_lengths = [3, 5, 7]
 
 
@@ -48,20 +48,17 @@ def gen_legitimate_logs():
     This function generates random logs for legitimate apps.
     '''
     count = 0
-    with open(log_file, 'w+') as f:
-        for app in apps:
-            if app != new_app:
-                ts_app = random.randint(0, api_interval)
-                accessible_apis = random.choices(list(apis.keys()), k = accessible_apis_n)
-                while ts_app <= ms_end:
-                    log_elements = [str(ts_app+api_interval), app, str(random.choice(accessible_apis)), "params"]
-                    log = " ".join(log_elements)
-                    f.write(log + "\n")
-                    ts_app = ts_app + api_interval
-                    count += 1
-                    sys.stdout.flush()
-                    print("Generated {} logs from legitimate apps!".format(count), flush=True, end="\r")
-    f.close()
+    for app in apps:
+        if app != new_app:
+            ts_app = random.randint(0, api_interval)
+            accessible_apis = random.choices(list(apis.keys()), k = accessible_apis_n)
+            while ts_app <= ms_end:
+                log_elements = [str(ts_app+api_interval), app, str(random.choice(accessible_apis)), "params"]
+                logs.append(log_elements)
+                ts_app = ts_app + api_interval
+                count += 1
+                sys.stdout.flush()
+                print("Generated {} logs from legitimate apps!".format(count), flush=True, end="\r")
     print()
 
 
@@ -71,30 +68,25 @@ def gen_cap_logs(p = 50):
     probability value passed as input.
     '''
     count = 0
-    with open(log_file, 'w+') as f:
-        ts_app = random.randint(0, cap_interval)
-        accessible_ds = random.choices(stores, k = 2)
-        while ts_app <= ms_end:
-            if random.randint(0, 100) < p:
-                # cap
-                cap_sequence = gen_cap_sequence(pick_target_app(), accessible_ds, random.choice(cap_lengths))
-                cap_elements = build_cap_logs(ts_app, cap_sequence)
-                for log in cap_elements:
-                    log = " ".join(log)
-                    f.write(log + "\n")
-                count += 1
-                sys.stdout.flush()
-                print("Generated {} CAP attacks!".format(count), flush=True, end="\r")
-            else:
-                # no cap (random API call)
-                api = random_api_call(random.choice(accessible_ds))
-                log_elements = [str(ts_app+api_interval), new_app, str(api), "params"]
-                log = " ".join(log_elements)
-                f.write(log + "\n")
+    ts_app = random.randint(0, cap_interval)
+    accessible_ds = random.choices(stores, k = 2)
+    while ts_app <= ms_end:
+        if random.randint(0, 100) < p:
+            # cap
+            cap_sequence = gen_cap_sequence(pick_target_app(), accessible_ds, random.choice(cap_lengths))
+            cap_elements = build_cap_logs(ts_app, cap_sequence)
+            for log in cap_elements:
+                logs.append(log)
+            count += 1
+            sys.stdout.flush()
+            print("Generated {} CAP attacks!".format(count), flush=True, end="\r")
+        else:
+            # no cap (random API call)
+            api = random_api_call(random.choice(accessible_ds))
+            log_elements = [str(ts_app+api_interval), new_app, str(api), "params"]
+            logs.append(log_elements)
 
-            ts_app = ts_app + cap_interval
-    
-    f.close()
+        ts_app = ts_app + cap_interval
     print()
 
 
@@ -187,11 +179,33 @@ def build_cap_logs(ts_app, cap_sequence):
     return result
 
 
+def create_log_file():
+    """
+    This function dumps the logs in the log file.
+    """
+    ts_logs = map(lambda x: [int(x[0]), x[1], x[2], x[3]], logs)
+    sorted_logs = sorted(ts_logs, key=lambda x: x[0])
+    with open(log_file, "w+") as f:
+        for log in sorted_logs:
+            log_string = " ".join([str(x) for x in log])
+            f.write(log_string + "\n")
+    print("Generated {} logs!".format(len(sorted_logs)))
+
+
 if __name__ == "__main__":
+    print("Apps:")
+    print(apps)
+    print("-------------------")
+    print("App under test:")
+    print(new_app)
+    print("-------------------")
+    print("Data stores:")
+    print(stores)
+    print("-------------------")
+    print("APIs:")
     for x in apis:
         print(x, apis[x])
     print("-------------------")
-    #gen_legitimate_logs()
+    gen_legitimate_logs()
     gen_cap_logs()
-    #cap_sequence = gen_cap_sequence('e', ['n', 'o'], 7)
-    #print(build_cap_logs(100, cap_sequence))
+    create_log_file()
