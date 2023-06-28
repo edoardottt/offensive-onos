@@ -9,12 +9,13 @@ https://github.com/edoardottt/offensive-onos
 import random
 import sys
 
+
 # ----------- global variables -----------
 
 apps = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
 stores = ['n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-
 new_app = random.choice(apps)
+
 
 def gen_apis():
     """
@@ -30,7 +31,7 @@ def gen_apis():
     return result
 
 apis = gen_apis()
-accessible_apis_n = 4 # number of APIs a single app can access
+accessible_apis_n = 4   # number of APIs a single app can access
 
 ms_start = 0            # start time (in milliseconds)
 ms_end = 10000000       # end time (in milliseconds)
@@ -201,6 +202,8 @@ def print_apis():
         print("\t", '"' + str(x) + '"', ":", apis[x], ",")
     print("}")
 
+
+# ----------- main -----------
 
 if __name__ == "__main__":
     print("Apps:")
