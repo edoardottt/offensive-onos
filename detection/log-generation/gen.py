@@ -19,7 +19,7 @@ new_app = random.choice(apps)
 
 def gen_apis():
     """
-    This function generates a random API dictionary.
+    This function generates the API dictionary.
     """
     result = {}
     i = 0
@@ -45,9 +45,9 @@ cap_lengths = [3, 5, 7]
 # ----------- functions -----------
 
 def gen_legitimate_logs():
-    '''
+    """
     This function generates random logs for legitimate apps.
-    '''
+    """
     count = 0
     for app in apps:
         if app != new_app:
@@ -64,10 +64,10 @@ def gen_legitimate_logs():
 
 
 def gen_cap_logs(p = 50):
-    '''
+    """
     This function generates CAP attack logs based on the
     probability value passed as input.
-    '''
+    """
     count = 0
     ts_app = random.randint(0, cap_interval)
     accessible_ds = random.choices(stores, k = 2)
