@@ -192,6 +192,16 @@ def create_log_file():
     print("Generated {} logs!".format(len(sorted_logs)))
 
 
+def print_apis():
+    """
+    This function prints the APIs as a dictionary.
+    """
+    print("{", end=" ")
+    for x in apis:
+        print("\t", '"' + str(x) + '"', ":", apis[x], ",")
+    print("}")
+
+
 if __name__ == "__main__":
     print("Apps:")
     print(apps)
@@ -203,8 +213,7 @@ if __name__ == "__main__":
     print(stores)
     print("-------------------")
     print("APIs:")
-    for x in apis:
-        print(x, apis[x])
+    print_apis()
     print("-------------------")
     gen_legitimate_logs()
     gen_cap_logs()
