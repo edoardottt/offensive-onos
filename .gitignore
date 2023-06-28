@@ -3,6 +3,7 @@ onos-dm/data*
 target/
 test*.log
 cap*.log
+.venv
 
 # ONOS compiled apps
 *.oar
