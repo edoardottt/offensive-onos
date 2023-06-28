@@ -2,6 +2,7 @@ onos-dm/data*
 .vscode/
 target/
 test*.log
+cap*.log
 
 # ONOS compiled apps
 *.oar
