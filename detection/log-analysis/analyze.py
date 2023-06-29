@@ -125,30 +125,34 @@ def plot(g, edges):
     This function plots the graph using matplotlib.
     """
     g["title"] = "CAP gadgets graph"
-    g.vs["name"] = stores + apps
-    g.vs["objtype"] = ["S"]*13 + ["A"] * 13
+    g.vs["name"] = apps + stores
+    g.vs["objtype"] = ["A"]*13 + ["S"] * 13
     g.es["count"] = list(edges.values())
 
     # Plot in matplotlib
     # Note that attributes can be set globally (e.g. vertex_size), 
     # or set individually using arrays (e.g. vertex_color)
-    fig, ax = plt.subplots(figsize=(40, 40))
+    fig, ax = plt.subplots(figsize=(100, 100))
     matplotlib.use('TkAgg')
     ig.plot(
         g,
         target=ax,
-        layout="auto",
-        vertex_size=0.5,
+        layout="tree",
+        vertex_size=0.4,
         vertex_color=[
             "steelblue" if objtype == "S" else "salmon" for objtype in g.vs["objtype"]
         ],
-        vertex_frame_width=8.0,
+        vertex_frame_width=0.0,
         vertex_frame_color="white",
         vertex_label=g.vs["name"],
-        vertex_label_size=13.0,
-        edge_label_size=15.0,
+        vertex_label_size=10.0,
+        edge_label_size=9.0,
+        edge_width=0.6,
         edge_label=g.es["count"],
     )
+
+    mng = plt.get_current_fig_manager()
+    mng.resize(*mng.window.maxsize())
 
     # save_img(fig)
     plt.show()
@@ -165,7 +169,7 @@ def save_img(fig):
 
 # ----------- graph analysis -----------
 
-def get_cap_gadgets(g, new_app):
+def get_cap_gadgets(g, new_app, cutoff):
     """
     This function returns ...
     """
@@ -173,10 +177,23 @@ def get_cap_gadgets(g, new_app):
     for store in stores:
         temp.extend(ig.Graph.get_all_simple_paths(g, 
                                                   object_id_dict[new_app], 
-                                                  object_id_dict[store])
+                                                  object_id_dict[store],
+                                                  int(cutoff))
                                                   )
 
     result = [elem for elem in temp if len(elem) > 3]
+    return result
+
+
+def translate_cap_gadgets(gadgets):
+    """
+    This function translates CAP gadgets expresses in graph nodes
+    to apps and stores proper names.
+    """
+    result = []
+    for gadget in gadgets:
+        new_gadget = [id_object_dict[elem] for elem in gadget]
+        result += [new_gadget]
     return result
 
 
@@ -199,11 +216,20 @@ if __name__ == "__main__":
     if new_app not in apps:
         print("Unknown application {}.".format(new_app))
         sys.exit()
+
     time_section = input("Enter the time section value: ")
     if not time_section.isdigit():
         print("The time section value must be an integer.")
         sys.exit()
 
-    gadgets = get_cap_gadgets(g, new_app)
-    print(len(gadgets))
+    cutoff = input("Enter the maximum length for CAP vectors: ")
+    if not cutoff.isdigit():
+        print("The maximum length for CAP vectors value must be an integer.")
+        sys.exit()
+
+    gadgets = get_cap_gadgets(g, new_app, cutoff)
+    print("Found {} CAP attack vectors!".format(str(len(gadgets))))
+    #for gadget in translate_cap_gadgets(gadgets):
+    #    print(gadget)
+
     plot(g, edges)
