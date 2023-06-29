@@ -7,7 +7,7 @@ This is a part of research activity for my Cybersecurity M.Sc. Thesis ([link](ht
 
 Useful papers to get context:
 
-- "Cross App Poisoning Attacks Detection in Software Defined Networks" by Edoardo Ottavianelli and Marco Polverini
+<!-- - "Cross App Poisoning Attacks Detection in Software Defined Networks" by Edoardo Ottavianelli and Marco Polverini -->
 - [Cross-App Poisoning in Software-Defined Networking](https://dl.acm.org/doi/10.1145/3243734.3243759)
 - [Protecting Virtual Programmable Switches from Cross-App Poisoning (CAP) Attacks](https://ieeexplore.ieee.org/document/9789775)
 - [Classifying Poisoning Attacks in Software Defined Networking](https://ieeexplore.ieee.org/abstract/document/8920310)
