@@ -33,7 +33,7 @@ def gen_apis():
 
 apis = gen_apis()
 
-log_file = "test.log"
+log_file = "test-mini2.log"
 object_id_dict = {}
 id_object_dict = {}
 edges = {}
@@ -265,6 +265,21 @@ def find_cap(lines, i, gadget, time_section, start_ts):
     return i_gadget == len(gadget)
 
 
+def api_to_cap_gadgets(api_pairs):
+    """
+    This function translates a sequence of pair 
+    (apps and their associated APIs) to CAP gadget sequences.
+    e.g.
+    [(b,9), (a,10), (a,1)] ---> ['b', 'r', 'a', 'n']
+    """
+    result = []
+    for i in range(0, len(api_pairs), 2):
+        result += [api_pairs[i][0]]
+        result += [apis[api_pairs[i][1]][1]]
+
+    return result
+
+
 def hashable_gadget(input_list):
     """
     This function takes as input a sequence of pair (apps 
@@ -272,9 +287,9 @@ def hashable_gadget(input_list):
     representing the CAP gadget.
     """
     result = ""
-    for pair in input_list:
-        for elem in pair:
-            result += str(elem)
+    cap_gadgets = api_to_cap_gadgets(input_list)
+    for elem in cap_gadgets:
+        result += str(elem)
     return result
 
 
@@ -288,7 +303,7 @@ def find_caps(gadgets, time_section):
     cap_distribution = {}
     with open(log_file, "r") as f:
         lines = f.readlines()
-    # here search for CAPs
+    # here search for CAPs in logs
     for i in range(len(lines)):
         sys.stdout.flush()
         print("> Scanning line {}/{}...".format(str(i), len(lines)), flush=True, end="\r")
@@ -305,9 +320,31 @@ def find_caps(gadgets, time_section):
 
     end_time = datetime.now()
     print()
-    print("CAP search in logs took {} milliseconds.".format(end_time - start_time))
+    print("CAP search in logs took {}.".format(end_time - start_time))
     
     return cap_distribution
+
+
+# ----------- result analysis -----------
+
+def print_cap_distribution(cap_distribution):
+    """
+    This function prints the potentially exploited CAP attacks
+    distribution sorted by items count.
+    """
+    sorted_cap_distribution = sorted(cap_distribution.items(), key=lambda x:x[1], reverse=True)
+    result = dict(sorted_cap_distribution)
+    for key, value in result.items():
+        print(key, value)
+
+
+def plot_top_cap_distribution(cap_distribution, k = 30):
+    """
+    This function plots the distribution of top k
+    potentially exploited CAP attacks.
+    """
+    result = dict(sorted(cap_distribution.items(), key=lambda x:x[1], reverse=True)[:k])
+    plt.bar(result.keys(), result.values(), 1.0, color='g')
 
 
 # ----------- main -----------
@@ -342,6 +379,7 @@ if __name__ == "__main__":
 
     cap_distribution = find_caps(cap_gadgets_apis, int(time_section))
 
-    print(cap_distribution)
+    print("Found {} potentially exploited CAP gadgets!".format(sum(cap_distribution.values())))
+    plot_top_cap_distribution(cap_distribution)
 
     plot(g, edges)
