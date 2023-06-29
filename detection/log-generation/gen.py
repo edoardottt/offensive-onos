@@ -33,15 +33,15 @@ def gen_apis():
 apis = gen_apis()
 accessible_apis_n = 4   # number of APIs a single app can access
 
-ms_start = 0            # start time (in milliseconds)
-ms_end = 10000000       # end time (in milliseconds)
-cap_interval = 1000     # time between a potential CAP attack and another (in ms)
-api_interval = 100      # time between an API call and another (in ms)
+ms_start = 0                # start time (in milliseconds)
+ms_end = 10000000           # end time (in milliseconds)
+cap_interval = 1000         # time between a potential CAP attack and another (in ms)
+api_interval = (50, 100)    # time between an API call and another (in ms)
 log_file = "test.log"
 summary_file = "test-info.txt"
 cap_created_file = "generated_cap.txt"
 logs = []
-cap_vectors = 10
+cap_vectors = 5
 cap_lengths = [3, 5]
 
 def pick_target_apps(k):
@@ -71,12 +71,16 @@ def gen_legitimate_logs():
     count = 0
     for app in apps:
         if app != new_app:
-            ts_app = random.randint(0, api_interval)
+            ts_app = random.randint(0, api_interval[1])
             accessible_apis = random.choices(list(apis.keys()), k = accessible_apis_n)
             while ts_app <= ms_end:
-                log_elements = [str(ts_app+api_interval), app, str(random.choice(accessible_apis)), "params"]
+                log_elements = [str(ts_app+random.randint(api_interval[0], api_interval[1])), 
+                                app, 
+                                str(random.choice(accessible_apis)), 
+                                "params"
+                                ]
                 logs.append(log_elements)
-                ts_app = ts_app + api_interval
+                ts_app = ts_app + api_interval[1]
                 count += 1
                 sys.stdout.flush()
                 print("Generated {} logs from legitimate apps!".format(count), flush=True, end="\r")
@@ -105,7 +109,10 @@ def gen_cap_logs(p = 50):
         else:
             # no cap (random API call)
             api = find_api('w', random.choice(accessible_ds))
-            log_elements = [str(ts_app+api_interval), new_app, str(api), "params"]
+            log_elements = [str(ts_app+random.randint(api_interval[0], api_interval[1])), 
+                            new_app, 
+                            str(api), 
+                            "params"]
             logs.append(log_elements)
 
         ts_app = ts_app + cap_interval
