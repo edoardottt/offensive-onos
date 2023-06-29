@@ -7,6 +7,7 @@ https://github.com/edoardottt/offensive-onos
 # ----------- import -----------
 
 import sys
+from datetime import datetime
 import igraph as ig
 import matplotlib
 import matplotlib.pyplot as plt
@@ -197,11 +198,116 @@ def translate_cap_gadgets(gadgets):
     return result
 
 
-def find_cap(caps, time_section):
+def find_api(action, store):
     """
-    This function returns ...
+    Return an API given an action (r/w) and a data store. 
     """
-    pass
+    for api in apis.keys():
+        if apis[api][0] == action and apis[api][1] == store:
+            return api
+    return None
+
+
+def cap_gadgets_to_api(gadgets):
+    """
+    This function translates CAP gadget sequences to a sequence
+    of pair, apps and their associated APIs.
+    e.g.
+    ['b', 'r', 'a', 'n'] ---> [(b,9), (a,10), (a,1)]
+    """
+    result = []
+    for gadget in gadgets:
+        translated_gadget = []
+        for i in range(0, len(gadget), 2):
+            if i == 0:
+                store = gadget[1]
+                api = find_api('w', store)
+                translated_gadget += [(gadget[0], api)]
+            else:
+                # read from previous store
+                store = gadget[i-1]
+                api = find_api('r', store)
+                translated_gadget += [(gadget[i], api)]
+                # write to next store
+                store = gadget[i+1]
+                api = find_api('w', store)
+                translated_gadget += [(gadget[i], api)]
+        result += [translated_gadget]
+
+    return result
+
+
+def get_log_info(line):
+    """
+    This function takes as input a log entry
+    and returns the timestamp, the app and the API.
+    """
+    elements = line.split(" ")
+    return int(elements[0]), elements[1], int(elements[2])
+
+
+def find_cap(lines, i, gadget, time_section, start_ts):
+    """
+    This function tries to find the CAP gadget in 
+    logs starting having the i-th log entry as first
+    element of the gadget.
+    """
+    i_gadget = 1
+    i+=1
+    while i_gadget < len(gadget) and i < len(lines):
+        timestamp, app, api = get_log_info(lines[i])
+        if timestamp - start_ts > time_section:
+            return False
+        if gadget[i_gadget] == (app, api):
+            i_gadget += 1
+        i += 1
+
+    return i_gadget == len(gadget)
+
+
+def hashable_gadget(input_list):
+    """
+    This function takes as input a sequence of pair (apps 
+    and their associated APIs) and returns an hashable string
+    representing the CAP gadget.
+    """
+    result = ""
+    for pair in input_list:
+        for elem in pair:
+            result += str(elem)
+    return result
+
+
+def find_caps(gadgets, time_section):
+    """
+    This function returns the distribution of potentially
+    exploited CAP attacks found in the log file.
+    """
+    start_time = datetime.now()
+    print("CAP search in logs started at {}.".format(start_time))
+    cap_distribution = {}
+    with open(log_file, "r") as f:
+        lines = f.readlines()
+    # here search for CAPs
+    for i in range(len(lines)):
+        sys.stdout.flush()
+        print("> Scanning line {}/{}...".format(str(i), len(lines)), flush=True, end="\r")
+        for gadget in gadgets:
+            start_timestamp, app, api = get_log_info(lines[i])
+            if gadget[0] == (app, api):
+                found = find_cap(lines, i, gadget, time_section, start_timestamp)
+                if found:
+                    gadget_hash = hashable_gadget(gadget)
+                    if gadget_hash in cap_distribution:
+                        cap_distribution[gadget_hash] += 1
+                    else:
+                        cap_distribution[gadget_hash] = 1
+
+    end_time = datetime.now()
+    print()
+    print("CAP search in logs took {} milliseconds.".format(end_time - start_time))
+    
+    return cap_distribution
 
 
 # ----------- main -----------
@@ -230,6 +336,12 @@ if __name__ == "__main__":
     gadgets = get_cap_gadgets(g, new_app, cutoff)
     print("Found {} CAP attack vectors!".format(str(len(gadgets))))
     #for gadget in translate_cap_gadgets(gadgets):
-    #    print(gadget)
+    #   print(gadget)
+
+    cap_gadgets_apis = cap_gadgets_to_api(translate_cap_gadgets(gadgets))
+
+    cap_distribution = find_caps(cap_gadgets_apis, int(time_section))
+
+    print(cap_distribution)
 
     plot(g, edges)
