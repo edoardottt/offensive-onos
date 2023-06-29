@@ -5,6 +5,7 @@ test*.log
 cap*.log
 .venv
 test-info.txt
+generated_cap.txt
 
 # ONOS compiled apps
 *.oar
