@@ -4,6 +4,7 @@ target/
 test*.log
 cap*.log
 .venv
+test-info.txt
 
 # ONOS compiled apps
 *.oar
