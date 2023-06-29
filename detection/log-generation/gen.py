@@ -41,6 +41,7 @@ log_file = "test.log"
 summary_file = "test-info.txt"
 cap_created_file = "generated_cap.txt"
 logs = []
+cap_vectors = 10
 cap_lengths = [3, 5]
 
 def pick_target_apps(k):
@@ -91,11 +92,11 @@ def gen_cap_logs(p = 50):
     count = 0
     ts_app = random.randint(0, cap_interval)
     accessible_ds = random.choices(stores, k = 2)
+    available_cap_vectors = gen_cap_vectors(accessible_ds)
     while ts_app <= ms_end:
         if random.randint(0, 100) < p:
             # cap
-            cap_sequence = gen_cap_sequence(random.choice(targets_apps), accessible_ds, random.choice(cap_lengths))
-            cap_elements = build_cap_logs(ts_app, cap_sequence)
+            cap_elements = build_cap_logs(ts_app, random.choice(available_cap_vectors))
             for log in cap_elements:
                 logs.append(log)
             count += 1
@@ -153,6 +154,17 @@ def gen_cap_sequence(target, accessible_ds, length):
         
         length_cap += 1
 
+    return result
+
+
+def gen_cap_vectors(accessible_ds):
+    """
+    Generate n random CAP vectors exploitable 
+    for the app under test.
+    """
+    result = []
+    for i in range(cap_vectors):
+        result += [gen_cap_sequence(random.choice(targets_apps), accessible_ds, random.choice(cap_lengths))]
     return result
 
 
