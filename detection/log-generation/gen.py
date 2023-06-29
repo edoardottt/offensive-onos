@@ -38,8 +38,26 @@ ms_end = 10000000       # end time (in milliseconds)
 cap_interval = 1000     # time between a potential CAP attack and another (in ms)
 api_interval = 100      # time between an API call and another (in ms)
 log_file = "test.log"
+summary_file = "test-info.txt"
 logs = []
-cap_lengths = [3, 5, 7]
+cap_lengths = [3, 5]
+
+def pick_target_apps(k):
+    """
+    Return a set of apps different from the app under test.
+    The size of the set is defined by the inpu value.
+    """
+    result = []
+    if k >= len(apps):
+        print("Targets apps size should be < len(apps).")
+        sys.exit()
+    while len(result) < k:
+        tmp_app = random.choice(apps)
+        if tmp_app != new_app:
+            result += [tmp_app]
+    return result
+
+targets_apps = pick_target_apps(3)
 
 
 # ----------- functions -----------
@@ -61,6 +79,7 @@ def gen_legitimate_logs():
                 sys.stdout.flush()
                 print("Generated {} logs from legitimate apps!".format(count), flush=True, end="\r")
     print()
+    return count
 
 
 def gen_cap_logs(p = 50):
@@ -74,7 +93,7 @@ def gen_cap_logs(p = 50):
     while ts_app <= ms_end:
         if random.randint(0, 100) < p:
             # cap
-            cap_sequence = gen_cap_sequence(pick_target_app(), accessible_ds, random.choice(cap_lengths))
+            cap_sequence = gen_cap_sequence(random.choice(targets_apps), accessible_ds, random.choice(cap_lengths))
             cap_elements = build_cap_logs(ts_app, cap_sequence)
             for log in cap_elements:
                 logs.append(log)
@@ -83,12 +102,13 @@ def gen_cap_logs(p = 50):
             print("Generated {} CAP attacks!".format(count), flush=True, end="\r")
         else:
             # no cap (random API call)
-            api = random_api_call(random.choice(accessible_ds))
+            api = find_api('w', random.choice(accessible_ds))
             log_elements = [str(ts_app+api_interval), new_app, str(api), "params"]
             logs.append(log_elements)
 
         ts_app = ts_app + cap_interval
     print()
+    return count
 
 
 def gen_cap_sequence(target, accessible_ds, length):
@@ -156,16 +176,6 @@ def find_api(action, store):
     return None
 
 
-def pick_target_app():
-    """
-    Return an app different from the app under test. 
-    """
-    result = None
-    while result is None or result == new_app:
-        result = random.choice(apps)
-    return result
-
-
 def build_cap_logs(ts_app, cap_sequence):
     """
     Return a sequence of logs from a CAP attack API sequence.
@@ -191,6 +201,7 @@ def create_log_file():
             log_string = " ".join([str(x) for x in log])
             f.write(log_string + "\n")
     print("Generated {} logs!".format(len(sorted_logs)))
+    return len(sorted_logs)
 
 
 def print_apis():
@@ -201,6 +212,18 @@ def print_apis():
     for x in apis:
         print("\t", '"' + str(x) + '"', ":", apis[x], ",")
     print("}")
+
+
+def generate_test_summary(prob, legitimate_logs, caps, logs):
+    with open(summary_file, "w+") as f:
+        f.write("Apps: {}\n".format(apps))
+        f.write("Stores: {}\n".format(stores))
+        f.write("App under test: {}\n".format(new_app))
+        f.write("APIs: {}\n".format(apis))
+        f.write("CAP attack probability {}%.\n".format(prob))
+        f.write("Generated {} logs from legitimate apps.\n".format(legitimate_logs))
+        f.write("Generated {} CAP attacks.\n".format(caps))
+        f.write("Generated {} logs.\n".format(logs))
 
 
 # ----------- main -----------
@@ -218,6 +241,13 @@ if __name__ == "__main__":
     print("APIs:")
     print_apis()
     print("-------------------")
-    gen_legitimate_logs()
-    gen_cap_logs()
-    create_log_file()
+    legitimate_logs = gen_legitimate_logs()
+
+    prob = input("Enter the probability for a CAP attack: ")
+    if not prob.isdigit() and int(prob) < 0 or int(prob) > 100:
+        print("The probability value must be an integer between 0 and 100.")
+        sys.exit()
+
+    caps = gen_cap_logs(p=int(prob))
+    logs = create_log_file()
+    generate_test_summary(prob, legitimate_logs, caps, logs)
