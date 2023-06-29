@@ -33,7 +33,7 @@ def gen_apis():
 
 apis = gen_apis()
 
-log_file = "test-mini2.log"
+log_file = "test-mini.log"
 object_id_dict = {}
 id_object_dict = {}
 edges = {}
@@ -372,8 +372,6 @@ if __name__ == "__main__":
 
     gadgets = get_cap_gadgets(g, new_app, cutoff)
     print("Found {} CAP attack vectors!".format(str(len(gadgets))))
-    #for gadget in translate_cap_gadgets(gadgets):
-    #   print(gadget)
 
     cap_gadgets_apis = cap_gadgets_to_api(translate_cap_gadgets(gadgets))
 
