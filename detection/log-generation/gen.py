@@ -39,6 +39,7 @@ cap_interval = 1000     # time between a potential CAP attack and another (in ms
 api_interval = 100      # time between an API call and another (in ms)
 log_file = "test.log"
 summary_file = "test-info.txt"
+cap_created_file = "generated_cap.txt"
 logs = []
 cap_lengths = [3, 5]
 
@@ -183,10 +184,30 @@ def build_cap_logs(ts_app, cap_sequence):
     delta = cap_interval // len(cap_sequence)
     result = []
     drift = 0
+    apis = []
     for elem in cap_sequence:
         elem_cap = [str(ts_app + drift), str(elem[0]), str(elem[1]), "params"]
         result.append(elem_cap)
         drift += delta
+        apis += [(str(elem[0]), str(elem[1]))]
+    cap_apis_created = api_to_cap_gadgets(apis)
+    with open(cap_created_file, "a+") as f:
+        f.write("".join(cap_apis_created) + "\n")
+    return result
+
+
+def api_to_cap_gadgets(api_pairs):
+    """
+    This function translates a sequence of pair 
+    (apps and their associated APIs) to CAP gadget sequences.
+    e.g.
+    [(b,9), (a,10), (a,1)] ---> ['b', 'r', 'a', 'n']
+    """
+    result = []
+    for i in range(0, len(api_pairs), 2):
+        result += [api_pairs[i][0]]
+        result += [apis[int(api_pairs[i][1])][1]]
+
     return result
 
 

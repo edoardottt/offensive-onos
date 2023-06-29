@@ -306,7 +306,7 @@ def find_caps(gadgets, time_section):
     # here search for CAPs in logs
     for i in range(len(lines)):
         sys.stdout.flush()
-        print("> Scanning line {}/{}...".format(str(i), len(lines)), flush=True, end="\r")
+        print("> Scanning line {}/{}...".format(str(i+1), len(lines)), flush=True, end="\r")
         for gadget in gadgets:
             start_timestamp, app, api = get_log_info(lines[i])
             if gadget[0] == (app, api):
