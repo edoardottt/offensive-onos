@@ -33,7 +33,7 @@ def gen_apis():
 
 apis = gen_apis()
 
-log_file = "test-mini.log"
+log_file = "test.log"
 object_id_dict = {}
 id_object_dict = {}
 edges = {}

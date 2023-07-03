@@ -31,7 +31,7 @@ def gen_apis():
     return result
 
 apis = gen_apis()
-accessible_apis_n = 4   # number of APIs a single app can access
+accessible_apis_n = 3   # number of APIs a single app can access
 
 ms_start = 0                # start time (in milliseconds)
 ms_end = 10000000           # end time (in milliseconds)
@@ -41,7 +41,7 @@ log_file = "test.log"
 summary_file = "test-info.txt"
 cap_created_file = "generated_cap.txt"
 logs = []
-cap_vectors = 5
+cap_vectors = 3
 cap_lengths = [3, 5]
 
 def pick_target_apps(k):
