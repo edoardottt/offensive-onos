@@ -10,6 +10,7 @@ CAP search in logs started at 2023-06-29 18:09:46.334016.
 CAP search in logs took 2:50:02.734105.
 Found 66368 potentially exploited CAP gadgets!
 ```
+
 ![graph](https://github.com/edoardottt/offensive-onos/blob/main/detection/log-analysis/tests/v1/graph.png)
 
 ![distribution](https://github.com/edoardottt/offensive-onos/blob/main/detection/log-analysis/tests/v1/distribution.png)
