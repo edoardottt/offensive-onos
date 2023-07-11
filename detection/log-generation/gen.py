@@ -41,7 +41,7 @@ log_file = "test.log"
 summary_file = "test-info.txt"
 cap_created_file = "generated_cap.txt"
 logs = []
-cap_vectors = 1
+cap_vectors = 3
 cap_lengths = [3, 5]
 
 def pick_target_apps(k):
