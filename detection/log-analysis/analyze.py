@@ -34,6 +34,7 @@ def gen_apis():
 apis = gen_apis()
 
 log_file = "test.log"
+cap_created_file = "generated_cap.txt"
 object_id_dict = {}
 id_object_dict = {}
 edges = {}
@@ -172,17 +173,17 @@ def get_injected_caps():
     """
     This function gets the CAPs injected during
     the log generation phase by reading the file
-    generated_cap.txt
+    cap_created_file
     """
     try:
         result = set()
-        with open("generated_cap.txt", "r") as f:
+        with open(cap_created_file, "r") as f:
             lines = f.readlines()
             for line in lines:
                 result.add(line.strip())
         return result
     except Exception:
-        print("No such file or directory: 'generated_cap.txt'")
+        print("No such file or directory: '{}'".format(cap_created_file))
         sys.exit()
 
 
@@ -345,6 +346,29 @@ def find_caps(gadgets, time_section):
 
 # ----------- result analysis -----------
 
+def clean_cap_distribution(cap_distribution):
+    """
+    This function returns a distribution of CAP sequences
+    without duplicates.
+    e.g.: 'idjv' is a child of 'idjvzo'
+    """
+    result = {}
+    children = []
+    for elem in cap_distribution.keys():
+        for elem2 in cap_distribution.keys():
+            if (
+                elem != elem2 and
+                len(elem) < len(elem2) and 
+                elem2[:len(elem)] == elem
+            ):
+                children += [elem]
+    
+    for k,v in cap_distribution.items():
+        if k not in children:
+            result[k] = v
+    return result
+
+
 def print_cap_distribution(cap_distribution):
     """
     This function prints the potentially exploited CAP attacks
@@ -397,7 +421,9 @@ if __name__ == "__main__":
 
     cap_distribution = find_caps(cap_gadgets_apis, int(time_section))
 
-    print("Found {} potentially exploited CAP gadgets!".format(sum(cap_distribution.values())))
-    plot_top_cap_distribution(get_injected_caps(), cap_distribution)
+    clean_cap_dist = clean_cap_distribution(cap_distribution)
+
+    print("Found {} potentially exploited CAP gadgets!".format(sum(clean_cap_dist.values())))
+    plot_top_cap_distribution(get_injected_caps(), clean_cap_dist)
 
     plot(g, edges)
