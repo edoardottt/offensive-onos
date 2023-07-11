@@ -168,6 +168,24 @@ def save_img(fig):
     ig.save("test_log.gml")
 
 
+def get_injected_caps():
+    """
+    This function gets the CAPs injected during
+    the log generation phase by reading the file
+    generated_cap.txt
+    """
+    try:
+        result = set()
+        with open("generated_cap.txt", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                result.add(line.strip())
+        return result
+    except Exception:
+        print("No such file or directory: 'generated_cap.txt'")
+        sys.exit()
+
+
 # ----------- graph analysis -----------
 
 def get_cap_gadgets(g, new_app, cutoff):
@@ -338,13 +356,15 @@ def print_cap_distribution(cap_distribution):
         print(key, value)
 
 
-def plot_top_cap_distribution(cap_distribution, k = 30):
+def plot_top_cap_distribution(injected_caps, cap_distribution, k = 30):
     """
     This function plots the distribution of top k
-    potentially exploited CAP attacks.
+    potentially exploited CAP attacks highlighting the 
+    CAP attack vectors injected during log generation.
     """
     result = dict(sorted(cap_distribution.items(), key=lambda x:x[1], reverse=True)[:k])
-    plt.bar(result.keys(), result.values(), 1.0, color='g')
+    colors = ['r' if x in injected_caps else 'g' for x in result.keys()]
+    plt.bar(result.keys(), result.values(), 1.0, color=colors)
 
 
 # ----------- main -----------
@@ -378,6 +398,6 @@ if __name__ == "__main__":
     cap_distribution = find_caps(cap_gadgets_apis, int(time_section))
 
     print("Found {} potentially exploited CAP gadgets!".format(sum(cap_distribution.values())))
-    plot_top_cap_distribution(cap_distribution)
+    plot_top_cap_distribution(get_injected_caps(), cap_distribution)
 
     plot(g, edges)
