@@ -1,7 +1,9 @@
 """
 Generate logs for CAP attacks detection simulation
 
-https://github.com/edoardottt/offensive-onos
+> https://github.com/edoardottt/offensive-onos
+
+> https://www.edoardoottavianelli.it/post/post8/master_thesis.pdf
 """
 
 # ----------- import -----------
@@ -77,8 +79,7 @@ def gen_legitimate_logs():
                 log_elements = [str(ts_app+random.randint(api_interval[0], api_interval[1])), 
                                 app, 
                                 str(random.choice(accessible_apis)), 
-                                "params"
-                                ]
+                                "params"]
                 logs.append(log_elements)
                 ts_app = ts_app + api_interval[1]
                 count += 1
@@ -171,7 +172,9 @@ def gen_cap_vectors(accessible_ds):
     """
     result = []
     for i in range(cap_vectors):
-        result += [gen_cap_sequence(random.choice(targets_apps), accessible_ds, random.choice(cap_lengths))]
+        result += [gen_cap_sequence(random.choice(targets_apps), 
+                                    accessible_ds, 
+                                    random.choice(cap_lengths))]
     return result
 
 
