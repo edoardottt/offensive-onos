@@ -1,7 +1,9 @@
 """
 Analyze logs for CAP attacks detection
 
-https://github.com/edoardottt/offensive-onos
+> https://github.com/edoardottt/offensive-onos
+
+> https://www.edoardoottavianelli.it/post/post8/master_thesis.pdf
 """
 
 # ----------- import -----------
