@@ -40,6 +40,7 @@ cap_created_file = "generated_cap.txt"
 object_id_dict = {}
 id_object_dict = {}
 edges = {}
+mal_app = True  # The new application is the one under test
 
 
 # ----------- graph construction -----------
@@ -189,11 +190,22 @@ def get_injected_caps():
         sys.exit()
 
 
+def is_yes(user_input):
+    """
+    This function checks the user input for a 
+    Y/n choice.
+    """
+    if user_input is None or user_input == "":
+        return True
+    return user_input[0].lower() == 'y'
+
+
 # ----------- graph analysis -----------
 
 def get_cap_gadgets(g, new_app, cutoff):
     """
-    This function returns ...
+    This function returns all the simple paths in the graph g
+    starting with the new_app and length <= cutoff
     """
     temp = []
     for store in stores:
@@ -204,6 +216,18 @@ def get_cap_gadgets(g, new_app, cutoff):
                                                   )
 
     result = [elem for elem in temp if len(elem) > 3]
+    return result
+
+
+def filter_not_mal_app_gadgets(gadgets):
+    """
+    This function returns all the CAP gadgets starting with
+    a legitimate app and having the new_app in the path.
+    """
+    result = []
+    for gadget in gadgets:
+        if new_app in gadget:
+            result += [gadget]
     return result
 
 
@@ -352,18 +376,30 @@ def clean_cap_distribution(cap_distribution):
     """
     This function returns a distribution of CAP sequences
     without duplicates.
-    e.g.: 'idjv' is a child of 'idjvzo'
+    e.g.: 'idjv' is a child of 'idjvzo' if mal_app is True
+    e.g.: 'idjv' is a child of 'zoidjv' if mal_app is False
     """
     result = {}
-    children = []
+    children = set()
     for elem in cap_distribution.keys():
         for elem2 in cap_distribution.keys():
-            if (
-                elem != elem2 and
-                len(elem) < len(elem2) and 
-                elem2[:len(elem)] == elem
-            ):
-                children += [elem]
+            if mal_app:
+                if (
+                    elem != elem2 and
+                    len(elem) < len(elem2) and 
+                    elem2[:len(elem)] == elem
+                ):
+                    children.add(elem)
+            else:
+                if (
+                    elem != elem2 and
+                    len(elem) < len(elem2) and 
+                    elem2[len(elem2)-len(elem):] == elem
+                ):
+                    children.add(elem)
+
+    print(cap_distribution.keys())
+    print(children)
     
     for k,v in cap_distribution.items():
         if k not in children:
@@ -402,7 +438,7 @@ if __name__ == "__main__":
     g = build_graph()
 
     # ask network operator to provide required input
-    new_app = input("Which is the app under test? ")
+    new_app = input("Which is the new application? ")
     if new_app not in apps:
         print("Unknown application {}.".format(new_app))
         sys.exit()
@@ -417,10 +453,28 @@ if __name__ == "__main__":
         print("The maximum length for CAP vectors value must be an integer.")
         sys.exit()
 
-    gadgets = get_cap_gadgets(g, new_app, cutoff)
-    print("Found {} CAP attack vectors!".format(str(len(gadgets))))
+    # if Y:
+    # change the analysis to malicious apps being the legitimate ones and
+    # the new_app the enabler.
+    mal_app_input = input("The new application is the one under test? (Y/n): ")
+    mal_app = is_yes(mal_app_input)
 
-    cap_gadgets_apis = cap_gadgets_to_api(translate_cap_gadgets(gadgets))
+    if mal_app:
+        gadgets = get_cap_gadgets(g, new_app, cutoff)
+        print("Found {} CAP attack vectors!".format(str(len(gadgets))))
+
+        cap_gadgets_apis = cap_gadgets_to_api(translate_cap_gadgets(gadgets))
+    
+    else:
+        gadgets = []
+        for app in apps:
+            if app != new_app:
+                gadgets += get_cap_gadgets(g, app, cutoff)
+        
+        filtered_gadgets = filter_not_mal_app_gadgets(translate_cap_gadgets(gadgets))
+        print("Found {} CAP attack vectors!".format(str(len(filtered_gadgets))))
+
+        cap_gadgets_apis = cap_gadgets_to_api(filtered_gadgets)
 
     cap_distribution = find_caps(cap_gadgets_apis, int(time_section))
 
