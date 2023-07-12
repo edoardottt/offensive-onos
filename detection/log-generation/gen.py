@@ -223,6 +223,7 @@ def build_cap_logs(ts_app, cap_sequence):
     """
     Return a sequence of logs from a CAP attack API sequence.
     """
+    open(cap_created_file, "w+")
     delta = cap_interval // len(cap_sequence)
     result = []
     drift = 0
