@@ -271,6 +271,16 @@ def generate_test_summary(prob, legitimate_logs, caps, logs):
         f.write("Generated {} logs.\n".format(logs))
 
 
+def is_yes(user_input):
+    """
+    This function checks the user input for a 
+    Y/n choice.
+    """
+    if user_input is None or user_input == "":
+        return True
+    return user_input[0].lower() == 'y'
+
+
 # ----------- main -----------
 
 if __name__ == "__main__":
@@ -293,6 +303,12 @@ if __name__ == "__main__":
     if not prob.isdigit() and int(prob) < 0 or int(prob) > 100:
         print("The probability value must be an integer between 0 and 100.")
         sys.exit()
+
+    mal_app = input("The new application is the one under test? (Y/n): ")
+    if not is_yes(mal_app):
+        # change the generation to malicious apps being the legitimate ones and
+        # the new_app the enabler.
+        pass
 
     caps = gen_cap_logs(p=int(prob))
     logs = create_log_file()
