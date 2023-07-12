@@ -288,6 +288,7 @@ if __name__ == "__main__":
     print("-------------------")
     legitimate_logs = gen_legitimate_logs()
 
+    # ask network operator to provide required input
     prob = input("Enter the probability for a CAP attack: ")
     if not prob.isdigit() and int(prob) < 0 or int(prob) > 100:
         print("The probability value must be an integer between 0 and 100.")
