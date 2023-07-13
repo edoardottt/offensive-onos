@@ -36,6 +36,8 @@ Search for .oar (ONOS archive) files
 make oar
 ```
 
+See [this GitHub Gist](https://gist.github.com/edoardottt/a8717c7601a552a5deb832f598d6d288) to understand how to connect ONOS and a Mininet VM.
+
 ## Links
 
 - [ONOS Wiki](https://wiki.onosproject.org/display/ONOS/ONOS)
