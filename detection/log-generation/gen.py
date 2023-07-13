@@ -115,6 +115,8 @@ def gen_cap_logs(mal_app = new_app, p = 50):
     accessible_ds = random.choices(stores, k = 2)
     accessible_ds_read = pick_accessible_ds_read(accessible_ds, N=1)
     available_cap_vectors = gen_cap_vectors(accessible_ds, malicious_app = mal_app)
+    # create a new cap_created_file file
+    open(cap_created_file, "w+")
     while ts_app <= ms_end:
         if random.randint(0, 100) < p:
             # cap
@@ -223,7 +225,6 @@ def build_cap_logs(ts_app, cap_sequence):
     """
     Return a sequence of logs from a CAP attack API sequence.
     """
-    open(cap_created_file, "w+")
     delta = cap_interval // len(cap_sequence)
     result = []
     drift = 0
