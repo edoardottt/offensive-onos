@@ -397,9 +397,6 @@ def clean_cap_distribution(cap_distribution):
                     elem2[len(elem2)-len(elem):] == elem
                 ):
                     children.add(elem)
-
-    print(cap_distribution.keys())
-    print(children)
     
     for k,v in cap_distribution.items():
         if k not in children:
