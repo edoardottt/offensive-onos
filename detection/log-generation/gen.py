@@ -1,5 +1,5 @@
 """
-Generate logs for CAP attacks detection simulation
+Generate logs for CAP (Cross App Poisoning) attacks detection simulation
 
 > https://github.com/edoardottt/offensive-onos
 

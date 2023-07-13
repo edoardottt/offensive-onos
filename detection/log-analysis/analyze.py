@@ -1,5 +1,5 @@
 """
-Analyze logs for CAP attacks detection
+Analyze logs for CAP (Cross App Poisoning) attacks detection
 
 > https://github.com/edoardottt/offensive-onos
 
@@ -452,7 +452,7 @@ if __name__ == "__main__":
 
     # if Y:
     # change the analysis to malicious apps being the legitimate ones and
-    # the new_app the enabler.
+    # the new_app the enabler (CAP gadget for the other apps).
     mal_app_input = input("The new application is the one under test? (Y/n): ")
     mal_app = is_yes(mal_app_input)
 
