@@ -41,6 +41,7 @@ import org.onosproject.net.DeviceId;
 import org.onosproject.core.ApplicationId;
 import org.onosproject.net.device.DeviceStore;
 import org.onosproject.net.Port;
+import org.onosproject.net.ConnectPoint;
 import org.onosproject.net.PortNumber;
 import org.onosproject.event.EventDeliveryService;
 import org.onosproject.net.device.DeviceEvent;
@@ -137,21 +138,24 @@ public class LinkEventApp {
 
     // dispatch event.
     private void dispatch() {
+        /*
+         * Link l = pickRandomLink();
+         * LinkEvent reason = new LinkEvent(LinkEvent.Type.LINK_REMOVED, l);
+         * List<Event> reasons = new ArrayList<>();
+         * reasons.add(reason);
+         * // Topology t = new DefaultTopology(1, );
+         * TopologyEvent te = new TopologyEvent(TopologyEvent.Type.TOPOLOGY_CHANGED,
+         * null, reasons, 0);
+         * eventDispatcher.post(te);
+         * log.info(te.toString());
+         */
+
+        // directly remove link from LinkStore
         Link l = pickRandomLink();
-
-        LinkEvent reason = new LinkEvent(LinkEvent.Type.LINK_REMOVED, l);
-
-        List<Event> reasons = new ArrayList<>();
-
-        reasons.add(reason);
-
-        // Topology t = new DefaultTopology(1, );
-
-        TopologyEvent te = new TopologyEvent(TopologyEvent.Type.TOPOLOGY_CHANGED, null, reasons, 0);
-
-        eventDispatcher.post(te);
-
-        log.info(te.toString());
+        ConnectPoint src = l.src();
+        ConnectPoint dst = l.dst();
+        linkStore.removeLink(src, dst);
+        log.info("LINK {} ({}, {}) removed!", l.toString(), src.toString(), dst.toString());
     }
 
     // startTimer starts a timer that timeouts every X seconds.
