@@ -1,14 +1,15 @@
 # test.log
 
 ```text
-Which is the app under test? j
+Which is the new application? j
 Enter the time section value: 1000
 Enter the maximum length for CAP vectors: 5
-Found 8 CAP attack vectors!
-CAP search in logs started at 2023-07-11 10:30:10.572529.
-> Scanning line 139922/139922...
-CAP search in logs took 0:00:01.248101.
-Found 6742 potentially exploited CAP gadgets!
+The new application is the one under test? (Y/n): 
+Found 14 CAP attack vectors!
+CAP search in logs started at 2023-08-31 15:16:31.541721.
+> Scanning line 139850/139850...
+CAP search in logs took 0:00:01.571533.
+Found 8274 potentially exploited CAP gadgets!
 ```
 
 ![graph](https://github.com/edoardottt/offensive-onos/blob/main/detection/log-analysis/tests/v4/graph.png)
