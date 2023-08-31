@@ -136,6 +136,20 @@ public class IpSaturation {
          * , getLocations(h1),
          * getLocations(h4));
          */
+
+        int startIp = 5;
+        int ipPool = 100;
+        String baseIp = "10.0.0.";
+
+        for (int i = startIp; i <= ipPool; i++) {
+            String chosenIp = baseIp + String.valueOf(i);
+            // addHost(chosenIp);
+        }
+    }
+
+    // addHost
+    private void addHost(String ipAddress) {
+
     }
 
     // startTimer starts a timer that timeouts every X seconds.
