@@ -40,6 +40,7 @@ import org.onosproject.net.device.DeviceStore;
 import org.onosproject.net.Device;
 import org.onosproject.net.Port;
 import org.onlab.packet.VlanId;
+import org.onosproject.net.host.DefaultHostDescription;
 import org.onosproject.net.SparseAnnotations;
 import org.onosproject.net.DefaultAnnotations;
 
@@ -161,15 +162,15 @@ public class IpSaturation {
         VlanId vlan;
         Set<HostLocation> locations;
         Set<IpAddress> ip;
-        boolean configured;
+        boolean configured = true;
         DefaultAnnotations annotations = DefaultAnnotations.builder().build();
-        HostDescription hd = DefaultHostDescription(mac, vlan, locations, ip, configured, annotations);
+        DefaultHostDescription hd = new DefaultHostDescription(mac, vlan, locations, ip, configured, annotations);
 
         ProviderId providerId;
         HostId hostId;
         HostDescription hostDescription;
-        boolean replaceIps;
-        createOrUpdateHost(providerId, hostId, hostDescription, replaceIps);
+        boolean replaceIps = true;
+        hostStore.createOrUpdateHost(providerId, hostId, hostDescription, replaceIps);
 
         log.info("Added Host {}!", ipAddress);
     }
