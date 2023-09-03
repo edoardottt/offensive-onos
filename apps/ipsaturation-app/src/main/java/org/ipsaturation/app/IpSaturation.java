@@ -49,6 +49,7 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.TimerTask;
 
 /**
@@ -158,10 +159,15 @@ public class IpSaturation {
 
     // addHost
     private void addHost(String ipAddress) {
-        MacAddress mac;
-        VlanId vlan;
-        Set<HostLocation> locations;
-        Set<IpAddress> ip;
+        MacAddress mac = MacAddress.valueOf(ipAddress);
+        Host h = pickRandomHost();
+        VlanId vlan = h.vlan();
+        Set<HostLocation> locations = h.locations();
+
+        IpAddress ipA = IpAddress.valueOf(ipAddress);
+        Set<IpAddress> ip = new HashSet<IpAddress>();
+        ip.add(ipA);
+
         boolean configured = true;
         DefaultAnnotations annotations = DefaultAnnotations.builder().build();
         DefaultHostDescription hd = new DefaultHostDescription(mac, vlan, locations, ip, configured, annotations);
