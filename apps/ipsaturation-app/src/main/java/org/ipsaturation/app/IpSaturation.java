@@ -172,9 +172,11 @@ public class IpSaturation {
         DefaultAnnotations annotations = DefaultAnnotations.builder().build();
         DefaultHostDescription hd = new DefaultHostDescription(mac, vlan, locations, ip, configured, annotations);
 
-        ProviderId providerId;
-        HostId hostId;
+        ProviderId providerId = h.providerId();
+        HostId hostId = HostId.hostId(ipAddress);
+
         HostDescription hostDescription;
+
         boolean replaceIps = true;
         hostStore.createOrUpdateHost(providerId, hostId, hostDescription, replaceIps);
 
