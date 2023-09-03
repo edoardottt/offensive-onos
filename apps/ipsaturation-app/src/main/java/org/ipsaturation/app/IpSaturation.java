@@ -174,11 +174,8 @@ public class IpSaturation {
 
         ProviderId providerId = h.providerId();
         HostId hostId = HostId.hostId(ipAddress);
-
-        HostDescription hostDescription;
-
         boolean replaceIps = true;
-        hostStore.createOrUpdateHost(providerId, hostId, hostDescription, replaceIps);
+        hostStore.createOrUpdateHost(providerId, hostId, hd, replaceIps);
 
         log.info("Added Host {}!", ipAddress);
     }
