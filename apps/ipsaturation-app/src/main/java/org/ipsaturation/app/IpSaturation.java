@@ -25,9 +25,13 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.onlab.packet.IpAddress;
+import org.onlab.packet.MacAddress;
 import org.onosproject.core.CoreService;
+import org.onosproject.net.host.HostDescription;
 import org.onosproject.net.host.HostService;
 import org.onosproject.net.host.HostStore;
+import org.onosproject.net.provider.ProviderId;
 import org.onosproject.net.Host;
 import org.onosproject.net.HostId;
 import org.onosproject.net.HostLocation;
@@ -35,6 +39,10 @@ import org.onosproject.net.device.DeviceService;
 import org.onosproject.net.device.DeviceStore;
 import org.onosproject.net.Device;
 import org.onosproject.net.Port;
+import org.onlab.packet.VlanId;
+import org.onosproject.net.SparseAnnotations;
+import org.onosproject.net.DefaultAnnotations;
+
 import java.util.Timer;
 import java.util.Random;
 import java.util.ArrayList;
@@ -143,13 +151,27 @@ public class IpSaturation {
 
         for (int i = startIp; i <= ipPool; i++) {
             String chosenIp = baseIp + String.valueOf(i);
-            // addHost(chosenIp);
+            addHost(chosenIp);
         }
     }
 
     // addHost
     private void addHost(String ipAddress) {
+        MacAddress mac;
+        VlanId vlan;
+        Set<HostLocation> locations;
+        Set<IpAddress> ip;
+        boolean configured;
+        DefaultAnnotations annotations = DefaultAnnotations.builder().build();
+        HostDescription hd = DefaultHostDescription(mac, vlan, locations, ip, configured, annotations);
 
+        ProviderId providerId;
+        HostId hostId;
+        HostDescription hostDescription;
+        boolean replaceIps;
+        createOrUpdateHost(providerId, hostId, hostDescription, replaceIps);
+
+        log.info("Added Host {}!", ipAddress);
     }
 
     // startTimer starts a timer that timeouts every X seconds.
