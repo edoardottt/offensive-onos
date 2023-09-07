@@ -34,13 +34,9 @@ import org.onosproject.net.HostLocation;
 import org.onosproject.net.device.DeviceService;
 import org.onosproject.net.device.DeviceStore;
 import org.onosproject.net.Device;
-import org.onosproject.net.Port;
-import java.util.Timer;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.TimerTask;
 
 /**
  * Impersonation Host Tracking Application.
@@ -65,33 +61,16 @@ public class ImpersonationHostTracking {
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected DeviceStore deviceStore;
 
-    Timer timer = new Timer();
-    TimerTask timerTask = new TimerTask() {
-        @Override
-        public void run() {
-            log.info("Time up, running Task!");
-            editHostStore();
-        }
-    };
-
-    // --------------------------------------------------------
-    // CHANGE THIS PARAMETER TO TRIGGER THE APP EVERY X MILLISECONDS.
-    // --------------------------------------------------------
-    private static final long TIMEOUT = 10000;
-
     @Activate
     protected void activate() {
         coreService.registerApplication("org.edoardottt.impersonationhosttracking.app",
                 () -> log.info("Periscope down."));
-        // startTimer(TIMEOUT);
         editHostStore();
         log.info("Started impersonationhosttracking App!");
     }
 
     @Deactivate
     protected void deactivate() {
-        // timer.cancel();
-        // timer.purge();
         log.info("Stopped impersonationhosttracking App!");
     }
 
@@ -130,11 +109,6 @@ public class ImpersonationHostTracking {
             hostStore.removeLocation(h.id(), oldLocation.iterator().next());
             log.info("Impersonation Host Tracking App: Victim Locations {}", getLocations(h.id()));
         }
-    }
-
-    // startTimer starts a timer that timeouts every X seconds.
-    private void startTimer(long timeout) {
-        timer.scheduleAtFixedRate(timerTask, 0, timeout);
     }
 
     private Set<HostLocation> getLocations(HostId hID) {
