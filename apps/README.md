@@ -8,4 +8,5 @@
 - [linkevent-app](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/linkevent-app): Generate Down Link events for malicious purposes.
 - [topoedit-app](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/topoedit-app): Messing up with the current network topology.
 - [dhcpipsat-app](https://github.com/edoardottt/offensive-onos/tree/main/apps/dhcpipsat-app): DHCP Server vulnerable to IP Saturation (via CAP attack).
+- [ipsaturation-app](https://github.com/edoardottt/offensive-onos/tree/main/apps/ipsaturation-app): Malicious IP Saturation Application for vulnerable DHCP Server.
 - [trash](https://github.com/edoardottt/offensive-onos-apps/tree/main/apps/trash): Some less important tests that haven't led to any useful result.
