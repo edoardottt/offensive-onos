@@ -32,7 +32,7 @@ make oar
 Start ONOS locally
 
 ```console
-bazel run onos-local
+bazelisk run onos-local --host_force_python=PY3
 ```
 
 Install the application
