@@ -50,7 +50,7 @@ mal_app = True  # The new application is the one under test
 def pick_target_apps(k):
     """
     Return a set of apps different from the app under test.
-    The size of the set is defined by the inpu value.
+    The size of the set is defined by the input value.
     """
     result = []
     if k >= len(apps):
@@ -78,7 +78,8 @@ def gen_legitimate_logs(start_app = new_app):
                 log_elements = [str(ts_app+random.randint(api_interval[0], api_interval[1])), 
                                 app, 
                                 str(random.choice(accessible_apis)), 
-                                "params"]
+                                "params",
+                                "0"]
                 logs.append(log_elements)
                 ts_app = ts_app + api_interval[1]
                 count += 1
@@ -120,22 +121,25 @@ def gen_cap_logs(mal_app = new_app, p = 50):
     while ts_app <= ms_end:
         if random.randint(0, 100) < p:
             # cap
-            cap_elements = build_cap_logs(ts_app, random.choice(available_cap_vectors))
+            count += 1
+            cap_elements = build_cap_logs(ts_app, random.choice(available_cap_vectors), count)
             for log in cap_elements:
                 logs.append(log)
-            count += 1
             sys.stdout.flush()
             print("Generated {} CAP attacks!".format(count), flush=True, end="\r")
         else:
+            # no cap
             api = find_api('r', random.choice(accessible_ds_read))
             log_elements = [str(ts_app+random.randint(api_interval[0], api_interval[1])), 
                             mal_app,
                             str(api),
-                            "params"]
+                            "params",
+                            "0"]
             logs.append(log_elements)
 
         ts_app = ts_app + cap_interval
     print()
+
     return count
 
 
@@ -186,7 +190,7 @@ def gen_cap_sequence(target, accessible_ds, length, mal_app = new_app):
 def gen_cap_vectors(accessible_ds, malicious_app = new_app):
     """
     Generate n random CAP vectors exploitable 
-    for the app under test.
+    from the malicious app.
     """
     result = []
     targets_apps = pick_target_apps(3)
@@ -221,7 +225,7 @@ def find_api(action, store):
     return None
 
 
-def build_cap_logs(ts_app, cap_sequence):
+def build_cap_logs(ts_app, cap_sequence, count):
     """
     Return a sequence of logs from a CAP attack API sequence.
     """
@@ -230,7 +234,7 @@ def build_cap_logs(ts_app, cap_sequence):
     drift = 0
     apis = []
     for elem in cap_sequence:
-        elem_cap = [str(ts_app + drift), str(elem[0]), str(elem[1]), "params"]
+        elem_cap = [str(ts_app + drift), str(elem[0]), str(elem[1]), "params", str(count)]
         result.append(elem_cap)
         drift += delta
         apis += [(str(elem[0]), str(elem[1]))]
@@ -259,7 +263,7 @@ def create_log_file():
     """
     This function dumps the logs in the log file.
     """
-    ts_logs = map(lambda x: [int(x[0]), x[1], x[2], x[3]], logs)
+    ts_logs = map(lambda x: [int(x[0]), x[1], x[2], x[3], x[4]], logs)
     sorted_logs = sorted(ts_logs, key=lambda x: x[0])
     with open(log_file, "w+") as f:
         for log in sorted_logs:
@@ -338,8 +342,8 @@ if __name__ == "__main__":
         print("The probability value must be an integer between 0 and 100.")
         sys.exit()
 
-    # if Y:
-    # change the generation to malicious apps being the legitimate ones and
+    # if n:
+    # change the log generation to malicious apps being the legitimate ones and
     # the new_app the enabler.
     mal_app_input = input("The new application is the one under test? (Y/n): ")
     mal_app = is_yes(mal_app_input)
