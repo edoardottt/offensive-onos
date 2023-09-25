@@ -435,7 +435,7 @@ def plot_top_cap_distribution(injected_caps, cap_distribution, k = 30):
     CAP attack vectors injected during log generation.
     """
     result = dict(sorted(cap_distribution.items(), key=lambda x:x[1], reverse=True)[:k])
-    colors = ['r' if x in injected_caps else 'g' for x in result.keys()]
+    colors = ['b' if x in injected_caps else 'r' for x in result.keys()]
     plt.bar(result.keys(), result.values(), 1.0, color=colors)
     #plt.savefig('distribution.png', dpi=500)
 
