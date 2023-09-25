@@ -298,6 +298,7 @@ def find_cap(lines, i, gadget, time_section, start_ts):
     This function tries to find the CAP gadget in 
     logs starting having the i-th log entry as first
     element of the gadget.
+    @return: is cap attack, cap id
     """
     i_gadget = 1
     i+=1
@@ -465,7 +466,6 @@ def precision_recall_stats():
         for i in range(1, cap_found_count+2):
             if not str(i)+"\n" in cap_found:
                 falsen.append(str(i))
-                print(str(i))
 
     # recall = true positives / (true positives + false negatives)
     recall = truep / (truep + len(falsen))
@@ -474,8 +474,8 @@ def precision_recall_stats():
     print("True positives: " + str(truep))
     print("False positives: " + str(totalp-truep))
     print("False negatives: " + str(len(falsen)))
-    print("Precision: " + str(precision))
-    print("Recall: " + str(recall))
+    print("Precision: " + str(round(precision, 3)))
+    print("Recall: " + str(round(recall, 3)))
 
 
 # ----------- main -----------
