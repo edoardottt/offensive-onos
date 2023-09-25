@@ -9,6 +9,7 @@ Analyze logs for CAP (Cross App Poisoning) attacks detection
 # ----------- import -----------
 
 import sys
+import os
 from datetime import datetime
 import igraph as ig
 import matplotlib
@@ -37,6 +38,7 @@ apis = gen_apis()
 
 log_file = "test.log"
 cap_created_file = "generated_cap.txt"
+cap_found_file = "cap_found.txt"
 object_id_dict = {}
 id_object_dict = {}
 edges = {}
@@ -285,10 +287,10 @@ def cap_gadgets_to_api(gadgets):
 def get_log_info(line):
     """
     This function takes as input a log entry
-    and returns the timestamp, the app and the API.
+    and returns the timestamp, the app, the API and the id.
     """
     elements = line.split(" ")
-    return int(elements[0]), elements[1], int(elements[2])
+    return int(elements[0]), elements[1], int(elements[2]), int(elements[4].strip())
 
 
 def find_cap(lines, i, gadget, time_section, start_ts):
@@ -300,14 +302,14 @@ def find_cap(lines, i, gadget, time_section, start_ts):
     i_gadget = 1
     i+=1
     while i_gadget < len(gadget) and i < len(lines):
-        timestamp, app, api = get_log_info(lines[i])
+        timestamp, app, api, id = get_log_info(lines[i])
         if timestamp - start_ts > time_section:
-            return False
+            return False, id
         if gadget[i_gadget] == (app, api):
             i_gadget += 1
         i += 1
 
-    return i_gadget == len(gadget)
+    return i_gadget == len(gadget), id
 
 
 def api_to_cap_gadgets(api_pairs):
@@ -338,6 +340,15 @@ def hashable_gadget(input_list):
     return result
 
 
+def add_cap_found(cap_found_count):
+    """
+    This function appends the identifier of the previously
+    found cap to the cap_found_file file.
+    """
+    with open(cap_found_file, "a+") as f:
+        f.write(str(cap_found_count) + "\n")
+
+
 def find_caps(gadgets, time_section):
     """
     This function returns the distribution of potentially
@@ -353,10 +364,11 @@ def find_caps(gadgets, time_section):
         sys.stdout.flush()
         print("> Scanning line {}/{}...".format(str(i+1), len(lines)), flush=True, end="\r")
         for gadget in gadgets:
-            start_timestamp, app, api = get_log_info(lines[i])
+            start_timestamp, app, api, id = get_log_info(lines[i])
             if gadget[0] == (app, api):
-                found = find_cap(lines, i, gadget, time_section, start_timestamp)
+                found, id = find_cap(lines, i, gadget, time_section, start_timestamp)
                 if found:
+                    add_cap_found(id)
                     gadget_hash = hashable_gadget(gadget)
                     if gadget_hash in cap_distribution:
                         cap_distribution[gadget_hash] += 1
@@ -427,9 +439,58 @@ def plot_top_cap_distribution(injected_caps, cap_distribution, k = 30):
     #plt.savefig('distribution.png', dpi=500)
 
 
+def precision_recall_stats():
+    """
+    This function analyzes the results (true/false positives/negatives)
+    to obtain the precision and recall values. 
+    """
+    truep = 0
+    totalp = 0
+    with open(cap_found_file, "r") as f:
+        for line in f.readlines():
+            if line.strip() != "":
+                totalp +=1
+                if line.strip() != "0":
+                    truep +=1
+    
+    # precision = true positives / total positives
+    precision = truep / totalp
+
+    with open(cap_created_file, "r") as f:
+        cap_found_count =  len(f.readlines()) - 1
+
+    falsen = []
+    with open(cap_found_file, "r") as f:
+        cap_found = f.readlines()
+        for i in range(1, cap_found_count+2):
+            if not str(i)+"\n" in cap_found:
+                falsen.append(str(i))
+                print(str(i))
+
+    # recall = true positives / (true positives + false negatives)
+    recall = truep / (truep + len(falsen))
+
+    print("Total positives: " + str(totalp))
+    print("True positives: " + str(truep))
+    print("False positives: " + str(totalp-truep))
+    print("False negatives: " + str(len(falsen)))
+    print("Precision: " + str(precision))
+    print("Recall: " + str(recall))
+
+
 # ----------- main -----------
 
+def rm_cap_found_file():
+    """
+    This function checks if cap_found_file exists,
+    if yes remove it. 
+    """
+    if os.path.isfile(cap_found_file):
+        os.remove(cap_found_file)
+
+
 if __name__ == "__main__":
+    rm_cap_found_file()
     init_dictonaries()
     edges = clean_empty_edges(read_log())
     g = build_graph()
@@ -479,5 +540,7 @@ if __name__ == "__main__":
 
     print("Found {} potentially exploited CAP gadgets!".format(sum(clean_cap_dist.values())))
     plot_top_cap_distribution(get_injected_caps(), clean_cap_dist)
+
+    precision_recall_stats()
 
     plot(g, edges)
