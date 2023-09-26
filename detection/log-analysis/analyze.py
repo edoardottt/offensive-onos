@@ -455,7 +455,10 @@ def precision_recall_stats():
                     truep +=1
     
     # precision = true positives / total positives
-    precision = truep / totalp
+    if truep != 0 and totalp != 0:
+        precision = truep / totalp
+    else:
+        precision = "N/A"
 
     with open(cap_created_file, "r") as f:
         cap_found_count =  len(f.readlines()) - 1
@@ -468,14 +471,23 @@ def precision_recall_stats():
                 falsen.append(str(i))
 
     # recall = true positives / (true positives + false negatives)
-    recall = truep / (truep + len(falsen))
+    if truep != 0 and (truep + len(falsen)) != 0:
+        recall = truep / (truep + len(falsen))
+    else:
+        recall = "N/A"
 
     print("Total positives: " + str(totalp))
     print("True positives: " + str(truep))
     print("False positives: " + str(totalp-truep))
     print("False negatives: " + str(len(falsen)))
-    print("Precision: " + str(round(precision, 3)))
-    print("Recall: " + str(round(recall, 3)))
+    if type(precision) == float:
+        print("Precision: " + str(round(precision, 3)))
+    else:
+        print("Precision: " + str(precision))
+    if type(recall) == float:
+        print("Recall: " + str(round(recall, 3)))
+    else:
+        print("Recall: " + str(recall))
 
 
 # ----------- main -----------
