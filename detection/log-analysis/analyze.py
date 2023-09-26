@@ -302,6 +302,7 @@ def find_cap(lines, i, gadget, time_section, start_ts):
     """
     i_gadget = 1
     i+=1
+    id = 0
     while i_gadget < len(gadget) and i < len(lines):
         timestamp, app, api, id = get_log_info(lines[i])
         if timestamp - start_ts > time_section:
@@ -364,7 +365,7 @@ def find_caps(gadgets, time_section):
     for i in range(len(lines)):
         sys.stdout.flush()
         print("> Scanning line {}/{}...".format(str(i+1), len(lines)), flush=True, end="\r")
-        for gadget in gadgets:
+        for gadget in clean_cap_children(gadgets):
             start_timestamp, app, api, id = get_log_info(lines[i])
             if gadget[0] == (app, api):
                 found, id = find_cap(lines, i, gadget, time_section, start_timestamp)
@@ -381,6 +382,38 @@ def find_caps(gadgets, time_section):
     print("CAP search in logs took {}.".format(end_time - start_time))
     
     return cap_distribution
+
+
+def clean_cap_children(cap_vectors):
+    """
+    This function returns a list of CAP vectors
+    without duplicates.
+    e.g.: 'idjv' is a child of 'idjvzo' if mal_app is True
+    e.g.: 'idjv' is a child of 'zoidjv' if mal_app is False
+    """
+    result = []
+    children = []
+    for elem in cap_vectors:
+        for elem2 in cap_vectors:
+            if mal_app:
+                if (
+                    elem != elem2 and
+                    len(elem) > len(elem2) and
+                    elem2[:len(elem)] == elem
+                ):
+                    children.append(elem)
+            else:
+                if (
+                    elem != elem2 and
+                    len(elem) < len(elem2) and 
+                    elem2[len(elem2)-len(elem):] == elem
+                ):
+                    children.append(elem)
+
+    for c in cap_vectors:
+        if c not in children:
+            result.append(c)
+    return result
 
 
 # ----------- result analysis -----------
