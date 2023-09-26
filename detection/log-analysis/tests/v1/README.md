@@ -18,6 +18,6 @@ Precision: 0.749
 Recall: 1.0
 ```
 
-![graph](https://github.com/edoardottt/offensive-onos/blob/main/detection/log-analysis/tests/v1/graph1.pdf)
+![graph](https://github.com/edoardottt/offensive-onos/blob/main/detection/log-analysis/tests/v1/graph1.png)
 
-![distribution](https://github.com/edoardottt/offensive-onos/blob/main/detection/log-analysis/tests/v1/dist1.pdf)
+![distribution](https://github.com/edoardottt/offensive-onos/blob/main/detection/log-analysis/tests/v1/dist1.png)
