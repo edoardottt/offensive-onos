@@ -1,20 +1,20 @@
 # test.log
 
 ```text
-Which is the new application? g
+Which is the new application? a
 Enter the time section value: 1000
 Enter the maximum length for CAP vectors: 5
 The new application is the one under test? (Y/n): 
-Found 11 CAP attack vectors!
-CAP search in logs started at 2023-09-25 15:45:22.151332.
-> Scanning line 149760/149760...
-CAP search in logs took 0:00:01.966709.
-Found 6992 potentially exploited CAP gadgets!
-Total positives: 11932
-True positives: 9880
-False positives: 2052
+Found 8 CAP attack vectors!
+CAP search in logs started at 2023-09-26 10:36:08.917322.
+> Scanning line 139954/139954...
+CAP search in logs took 0:00:01.414003.
+Found 6760 potentially exploited CAP gadgets!
+Total positives: 6760
+True positives: 4977
+False positives: 1783
 False negatives: 0
-Precision: 0.828
+Precision: 0.736
 Recall: 1.0
 ```
 
