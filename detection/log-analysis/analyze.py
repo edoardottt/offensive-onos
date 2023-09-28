@@ -293,7 +293,7 @@ def get_log_info(line):
     return int(elements[0]), elements[1], int(elements[2]), int(elements[4].strip())
 
 
-def find_cap(lines, i, gadget, time_section, start_ts):
+def find_cap(lines, i, gadget, time_section, start_ts, id_cap):
     """
     This function tries to find the CAP gadget in 
     logs starting having the i-th log entry as first
@@ -302,16 +302,18 @@ def find_cap(lines, i, gadget, time_section, start_ts):
     """
     i_gadget = 1
     i+=1
-    id = 0
+    ids = set()
+    ids.add(id_cap)
     while i_gadget < len(gadget) and i < len(lines):
         timestamp, app, api, id = get_log_info(lines[i])
         if timestamp - start_ts > time_section:
-            return False, id
+            return False, False, "0"
         if gadget[i_gadget] == (app, api):
             i_gadget += 1
+            ids.add(id)
         i += 1
 
-    return i_gadget == len(gadget), id
+    return i_gadget == len(gadget), len(ids) == 1, id
 
 
 def api_to_cap_gadgets(api_pairs):
@@ -351,11 +353,12 @@ def add_cap_found(cap_found_count):
         f.write(str(cap_found_count) + "\n")
 
 
-def find_caps(gadgets, time_section):
+def find_caps(gadgets, time_section, gadget_dist):
     """
     This function returns the distribution of potentially
     exploited CAP attacks found in the log file.
     """
+    caps_found = {}
     start_time = datetime.now()
     print("CAP search in logs started at {}.".format(start_time))
     cap_distribution = {}
@@ -365,23 +368,34 @@ def find_caps(gadgets, time_section):
     for i in range(len(lines)):
         sys.stdout.flush()
         print("> Scanning line {}/{}...".format(str(i+1), len(lines)), flush=True, end="\r")
-        for gadget in clean_cap_children(gadgets):
+        for gadget in gadgets:
             start_timestamp, app, api, id = get_log_info(lines[i])
             if gadget[0] == (app, api):
-                found, id = find_cap(lines, i, gadget, time_section, start_timestamp)
+                found, truepositive, id = find_cap(lines, i, gadget, time_section, start_timestamp, id)
                 if found:
-                    add_cap_found(id)
-                    gadget_hash = hashable_gadget(gadget)
-                    if gadget_hash in cap_distribution:
-                        cap_distribution[gadget_hash] += 1
+                    gadget_key = hashable_gadget(gadget)
+                    if truepositive:
+                        if gadget_key in caps_found:
+                            caps_found[gadget_key].append(id)
+                        else:
+                            caps_found[gadget_key] = [id]
+                        #add_cap_found(id)
                     else:
-                        cap_distribution[gadget_hash] = 1
+                        if gadget_key in caps_found:
+                            caps_found[gadget_key].append("0")
+                        else:
+                            caps_found[gadget_key] = ["0"]
+                        #add_cap_found("0")
+                    if gadget_key in cap_distribution:
+                        cap_distribution[gadget_key] += 1
+                    else:
+                        cap_distribution[gadget_key] = 1
 
     end_time = datetime.now()
     print()
     print("CAP search in logs took {}.".format(end_time - start_time))
     
-    return cap_distribution
+    return cap_distribution, caps_found
 
 
 def clean_cap_children(cap_vectors):
@@ -398,7 +412,7 @@ def clean_cap_children(cap_vectors):
             if mal_app:
                 if (
                     elem != elem2 and
-                    len(elem) > len(elem2) and
+                    len(elem) < len(elem2) and
                     elem2[:len(elem)] == elem
                 ):
                     children.append(elem)
@@ -418,8 +432,64 @@ def clean_cap_children(cap_vectors):
 
 # ----------- result analysis -----------
 
-def clean_cap_distribution(cap_distribution):
+def clean_cap_distribution(cap_distribution, gadget_dist):
     """
+    This function decides if the CAP children must be
+    removed or not.
+    """
+    for child in list(cap_distribution):
+        for father in list(cap_distribution):
+            if mal_app:
+                if (
+                    child != father and
+                    len(child) < len(father) and 
+                    father[:len(child)] == child
+                ):
+                    if child in cap_distribution and father in cap_distribution:
+                        if comparable_values(child, father, 10):
+                            remove_elem_from_distribution(cap_distribution, child)
+                            remove_elem_from_distribution(gadget_dist, child)
+                        else:
+                            remove_elem_from_distribution(cap_distribution, father)
+                            remove_elem_from_distribution(gadget_dist, father)
+            else:
+                if (
+                    child != father and
+                    len(child) < len(father) and 
+                    father[len(father)-len(child):] == child
+                ):
+                    if child in cap_distribution and father in cap_distribution:
+                        if comparable_values(child, father, 10):
+                            remove_elem_from_distribution(cap_distribution, child)
+                            remove_elem_from_distribution(gadget_dist, child)
+                        else:
+                            remove_elem_from_distribution(cap_distribution, father)
+                            remove_elem_from_distribution(gadget_dist, father)
+    return cap_distribution, gadget_dist
+
+
+def comparable_values(elem, elem2, percentage):
+    """
+    This function checks if two elements are comparable
+    given a percentage value (e.g. 10 -> diff < 10%)
+    """
+    diff = abs(cap_distribution[elem]-cap_distribution[elem2])
+    max_elem = max([cap_distribution[elem], cap_distribution[elem2]])
+    perc_value = max_elem / 100 * percentage
+    return diff < perc_value
+
+
+def remove_elem_from_distribution(distribution, elem):
+    """
+    This function removes an element in the distribution.
+    """
+    distribution.pop(elem, None)
+    return distribution
+
+
+def clean_cap_distribution_children(cap_distribution):
+    """
+    >deprecated<
     This function returns a distribution of CAP sequences
     without duplicates.
     e.g.: 'idjv' is a child of 'idjvzo' if mal_app is True
@@ -473,46 +543,40 @@ def plot_top_cap_distribution(injected_caps, cap_distribution, k = 30):
     #plt.savefig('distribution.png', dpi=500)
 
 
-def precision_recall_stats():
+def precision_recall_stats(gadget_dist):
     """
     This function analyzes the results (true/false positives/negatives)
     to obtain the precision and recall values. 
     """
     truep = 0
-    totalp = 0
-    with open(cap_found_file, "r") as f:
-        for line in f.readlines():
-            if line.strip() != "":
-                totalp +=1
-                if line.strip() != "0":
-                    truep +=1
-    
+    totalp = 0 
+    for x in gadget_dist.values():
+        for y in x:
+            totalp += 1
+            if str(y) != "0":
+                truep += 1
+
     # precision = true positives / total positives
     if truep != 0 and totalp != 0:
         precision = truep / totalp
     else:
         precision = "N/A"
 
+    # find false negatives
     with open(cap_created_file, "r") as f:
-        cap_found_count =  len(f.readlines()) - 1
-
-    falsen = []
-    with open(cap_found_file, "r") as f:
-        cap_found = f.readlines()
-        for i in range(1, cap_found_count+2):
-            if not str(i)+"\n" in cap_found:
-                falsen.append(str(i))
+        cap_created_count =  len(f.readlines())
+    falsen = cap_created_count - truep
 
     # recall = true positives / (true positives + false negatives)
-    if truep != 0 and (truep + len(falsen)) != 0:
-        recall = truep / (truep + len(falsen))
+    if truep != 0 and (truep + falsen) != 0:
+        recall = truep / (truep + falsen)
     else:
         recall = "N/A"
 
     print("Total positives: " + str(totalp))
     print("True positives: " + str(truep))
     print("False positives: " + str(totalp-truep))
-    print("False negatives: " + str(len(falsen)))
+    print("False negatives: " + str(falsen))
     if type(precision) == float:
         print("Precision: " + str(round(precision, 3)))
     else:
@@ -579,13 +643,14 @@ if __name__ == "__main__":
 
         cap_gadgets_apis = cap_gadgets_to_api(filtered_gadgets)
 
-    cap_distribution = find_caps(cap_gadgets_apis, int(time_section))
+    gadget_dist = {}
+    cap_distribution, gadget_dist = find_caps(cap_gadgets_apis, int(time_section), gadget_dist)
 
-    clean_cap_dist = clean_cap_distribution(cap_distribution)
+    clean_cap_dist, gadget_dist = clean_cap_distribution(cap_distribution, gadget_dist)
 
     print("Found {} potentially exploited CAP gadgets!".format(sum(clean_cap_dist.values())))
     plot_top_cap_distribution(get_injected_caps(), clean_cap_dist)
 
-    precision_recall_stats()
+    precision_recall_stats(gadget_dist)
 
     plot(g, edges)
