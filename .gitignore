@@ -6,7 +6,6 @@ cap*.log
 .venv
 test-info.txt
 generated_cap.txt
-cap_found.txt
 test-backup/
 
 # ONOS compiled apps
