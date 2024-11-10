@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * @author edoardottt, https://www.edoardoottavianelli.it/
+ * @author edoardottt, https://edoardottt.com/
  */
 
 package org.ipsaturation.app;

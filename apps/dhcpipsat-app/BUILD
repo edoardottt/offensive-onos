@@ -14,5 +14,5 @@ onos_app(
     description = "CAP attack POC",
     included_bundles = BUNDLES,
     title = "Vulnerable DHCP Server",
-    url = "https://www.edoardoottavianelli.it/",
+    url = "https://edoardottt.com/",
 )
