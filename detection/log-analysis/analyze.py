@@ -3,7 +3,7 @@ Analyze logs for CAP (Cross App Poisoning) attacks detection
 
 > https://github.com/edoardottt/offensive-onos
 
-> https://www.edoardoottavianelli.it/post/post8/master_thesis.pdf
+> https://edoardottt.com/master-thesis
 """
 
 # ----------- import -----------
